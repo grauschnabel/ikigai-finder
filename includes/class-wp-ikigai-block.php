@@ -1,4 +1,11 @@
 <?php
+/**
+ * WP Ikigai Block Class
+ *
+ * Diese Klasse verwaltet den Ikigai Chat Block.
+ *
+ * @package WP_Ikigai
+ */
 
 class WP_Ikigai_Block {
     public static function init() {
@@ -16,7 +23,9 @@ class WP_Ikigai_Block {
         wp_register_script(
             'wp-ikigai-block-editor',
             plugins_url('build/index.js', dirname(__FILE__)),
-            array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n')
+            array('wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n'),
+            WP_IKIGAI_VERSION,
+            true
         );
 
         wp_register_style(
@@ -26,7 +35,9 @@ class WP_Ikigai_Block {
 
         wp_register_style(
             'wp-ikigai-block-style',
-            plugins_url('css/style.css', dirname(__FILE__))
+            plugins_url('css/style.css', dirname(__FILE__)),
+            array(),
+            WP_IKIGAI_VERSION
         );
 
         register_block_type('wp-ikigai/chat-block', array(
@@ -65,25 +76,47 @@ class WP_Ikigai_Block {
 
             wp_localize_script('wp-ikigai-chat', 'wpIkigai', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('wp_ikigai_chat')
+                'nonce' => wp_create_nonce('wp_ikigai_chat'),
+                'errorText' => __('Fehler: ', 'wp-ikigai')
             ));
         }
     }
 
     public static function render_block($attributes) {
-        wp_enqueue_style('wp-ikigai-style');
+        // Registriere und lade Frontend-Assets
+        wp_register_script(
+            'wp-ikigai-chat',
+            plugins_url('js/chat.js', dirname(__FILE__)),
+            array('jquery'),
+            WP_IKIGAI_VERSION,
+            true
+        );
+
+        wp_localize_script('wp-ikigai-chat', 'wpIkigai', array(
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('wp_ikigai_chat'),
+            'errorText' => __('Fehler: ', 'wp-ikigai')
+        ));
+
         wp_enqueue_script('wp-ikigai-chat');
+        wp_enqueue_style('wp-ikigai-block-style');
 
         ob_start();
         ?>
-        <div class="wp-block-wp-ikigai-chat">
+        <div id="wp-ikigai-chat" class="wp-ikigai-chat-container">
             <div class="wp-ikigai-chat-messages"></div>
-            <div class="wp-ikigai-chat-input-container">
-                <textarea class="wp-ikigai-chat-input" placeholder="<?php echo esc_attr__('Type your message here...', 'wp-ikigai'); ?>"></textarea>
-                <button class="wp-ikigai-chat-send"><?php echo esc_html__('Send', 'wp-ikigai'); ?></button>
+            <div class="wp-ikigai-chat-input">
+                <textarea id="wp-ikigai-message" placeholder="<?php echo esc_attr__('Geben Sie hier Ihre Nachricht ein...', 'wp-ikigai'); ?>"></textarea>
+                <button class="wp-ikigai-send"><?php echo esc_html__('Senden', 'wp-ikigai'); ?></button>
             </div>
-            <div class="wp-ikigai-phase-display">
-                <?php echo esc_html__('Current Phase:', 'wp-ikigai'); ?> <span class="wp-ikigai-current-phase">1</span>
+            <div class="wp-ikigai-loading" style="display: none;">
+                <div class="wp-ikigai-typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+            <div class="wp-ikigai-feedback" style="display: none;">
+                <button class="wp-ikigai-feedback-btn" data-value="yes"><?php echo esc_html__('👍 Hilfreich', 'wp-ikigai'); ?></button>
+                <button class="wp-ikigai-feedback-btn" data-value="no"><?php echo esc_html__('👎 Nicht hilfreich', 'wp-ikigai'); ?></button>
             </div>
         </div>
         <?php

@@ -2,7 +2,7 @@
 
 A WordPress plugin that provides an AI-powered Ikigai finder to guide users through their personal Ikigai discovery process.
 
-Version: 0.1.3
+Version: 0.1.4
 
 ## Description
 
@@ -87,6 +87,13 @@ Email: martin@kaffanke.info
 GitHub: [@grauschnabel](https://github.com/grauschnabel)
 
 ## Changelog
+
+### 0.1.4
+- Complete German translation
+- Improved block rendering and asset loading
+- Enhanced error handling and security
+- Fixed coding standards compliance
+- Optimized chat interface
 
 ### 0.1.3
 - Enhanced UI with WordPress system colors
