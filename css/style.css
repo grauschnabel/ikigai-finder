@@ -335,7 +335,7 @@
     transform: none;
 }
 
-/* Entferne die Kopier-Buttons */
+/* Remove copy buttons */
 .wp-ikigai-actions,
 .wp-ikigai-copy-chat,
 .wp-ikigai-copy-ikigai,
@@ -343,7 +343,7 @@
     display: none !important;
 }
 
-/* Verbesserte Loading-Animation */
+/* Enhanced loading animation */
 .wp-ikigai-typing-indicator {
     display: inline-flex;
     gap: 4px;

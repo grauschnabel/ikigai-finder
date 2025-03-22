@@ -2,7 +2,7 @@
 /**
  * WP Ikigai Block Class
  *
- * Diese Klasse verwaltet den Ikigai Chat Block.
+ * This class manages the Ikigai Chat Block.
  *
  * @package WP_Ikigai
  */
@@ -54,10 +54,10 @@ class WP_Ikigai_Block {
 
     public static function enqueue_frontend_assets() {
         if (has_block('wp-ikigai/chat-block')) {
-            // Dashicons für die Kopier-Buttons
+            // Dashicons for copy buttons
             wp_enqueue_style('dashicons');
             
-            // Marked.js für Markdown-Parsing
+            // Marked.js for Markdown parsing
             wp_enqueue_script(
                 'marked',
                 'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
@@ -77,13 +77,13 @@ class WP_Ikigai_Block {
             wp_localize_script('wp-ikigai-chat', 'wpIkigai', array(
                 'ajaxUrl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('wp_ikigai_chat'),
-                'errorText' => __('Fehler: ', 'wp-ikigai')
+                'errorText' => __('Error: ', 'wp-ikigai')
             ));
         }
     }
 
     public static function render_block($attributes) {
-        // Registriere und lade Frontend-Assets
+        // Register and load frontend assets
         wp_register_script(
             'wp-ikigai-chat',
             plugins_url('js/chat.js', dirname(__FILE__)),
@@ -95,7 +95,7 @@ class WP_Ikigai_Block {
         wp_localize_script('wp-ikigai-chat', 'wpIkigai', array(
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('wp_ikigai_chat'),
-            'errorText' => __('Fehler: ', 'wp-ikigai')
+            'errorText' => __('Error: ', 'wp-ikigai')
         ));
 
         wp_enqueue_script('wp-ikigai-chat');
@@ -106,8 +106,8 @@ class WP_Ikigai_Block {
         <div id="wp-ikigai-chat" class="wp-ikigai-chat-container">
             <div class="wp-ikigai-chat-messages"></div>
             <div class="wp-ikigai-chat-input">
-                <textarea id="wp-ikigai-message" placeholder="<?php echo esc_attr__('Geben Sie hier Ihre Nachricht ein...', 'wp-ikigai'); ?>"></textarea>
-                <button class="wp-ikigai-send"><?php echo esc_html__('Senden', 'wp-ikigai'); ?></button>
+                <textarea id="wp-ikigai-message" placeholder="<?php echo esc_attr__('Type your message here...', 'wp-ikigai'); ?>"></textarea>
+                <button class="wp-ikigai-send"><?php echo esc_html__('Send', 'wp-ikigai'); ?></button>
             </div>
             <div class="wp-ikigai-loading" style="display: none;">
                 <div class="wp-ikigai-typing-indicator">
@@ -115,8 +115,8 @@ class WP_Ikigai_Block {
                 </div>
             </div>
             <div class="wp-ikigai-feedback" style="display: none;">
-                <button class="wp-ikigai-feedback-btn" data-value="yes"><?php echo esc_html__('👍 Hilfreich', 'wp-ikigai'); ?></button>
-                <button class="wp-ikigai-feedback-btn" data-value="no"><?php echo esc_html__('👎 Nicht hilfreich', 'wp-ikigai'); ?></button>
+                <button class="wp-ikigai-feedback-btn" data-value="yes"><?php echo esc_html__('👍 Helpful', 'wp-ikigai'); ?></button>
+                <button class="wp-ikigai-feedback-btn" data-value="no"><?php echo esc_html__('👎 Not helpful', 'wp-ikigai'); ?></button>
             </div>
         </div>
         <?php
@@ -133,41 +133,41 @@ class WP_Ikigai_Block {
 
     public static function handle_chat_request() {
         try {
-            // Überprüfe Nonce
+            // Check nonce
             if (!check_ajax_referer('wp_ikigai_chat', 'nonce', false)) {
-                self::debug_log('Nonce Validierung fehlgeschlagen');
-                wp_send_json_error(['message' => 'Sicherheitsüberprüfung fehlgeschlagen.'], 403);
+                self::debug_log('Nonce validation failed');
+                wp_send_json_error(['message' => __('Security check failed.', 'wp-ikigai')], 403);
                 return;
             }
 
-            // Überprüfe API-Key
+            // Check API key
             $api_key = get_option('wp_ikigai_openai_key');
             if (empty($api_key)) {
-                self::debug_log('API Key nicht konfiguriert');
-                wp_send_json_error(['message' => 'API-Schlüssel nicht konfiguriert. Bitte konfigurieren Sie den API-Schlüssel in den Einstellungen.'], 400);
+                self::debug_log('API key not configured');
+                wp_send_json_error(['message' => __('API key not configured. Please configure the API key in the settings.', 'wp-ikigai')], 400);
                 return;
             }
 
-            // Überprüfe System Prompt
+            // Check system prompt
             $system_prompt = get_option('wp_ikigai_system_prompt');
             if (empty($system_prompt)) {
-                self::debug_log('System Prompt nicht konfiguriert');
-                wp_send_json_error(['message' => 'System Prompt nicht konfiguriert.'], 400);
+                self::debug_log('System prompt not configured');
+                wp_send_json_error(['message' => __('System prompt not configured.', 'wp-ikigai')], 400);
                 return;
             }
 
-            // Überprüfe und verarbeite die Konversation
+            // Check and process conversation
             $conversation = isset($_POST['conversation']) ? json_decode(stripslashes($_POST['conversation']), true) : [];
             if (json_last_error() !== JSON_ERROR_NONE) {
-                self::debug_log('JSON Decode Fehler', [
+                self::debug_log('JSON decode error', [
                     'error' => json_last_error_msg(),
                     'raw_data' => $_POST['conversation']
                 ]);
-                wp_send_json_error(['message' => 'Fehler beim Verarbeiten der Konversation: ' . json_last_error_msg()], 400);
+                wp_send_json_error(['message' => __('Error processing conversation: ', 'wp-ikigai') . json_last_error_msg()], 400);
                 return;
             }
 
-            // Bereite die Nachrichten für die API vor
+            // Prepare messages for API
             $messages = [
                 [
                     'role' => 'system',
@@ -175,29 +175,29 @@ class WP_Ikigai_Block {
                 ]
             ];
 
-            // Verarbeite die Benutzernachricht
+            // Process user message
             $user_message = sanitize_text_field($_POST['message']);
             
-            // Extrahiere die aktuelle Phase aus der Nachricht, wenn vorhanden
+            // Extract current phase from message if present
             $current_phase = 1;
             if (preg_match('/\[CURRENT_PHASE=(\d+)\]/', $user_message, $matches)) {
                 $current_phase = intval($matches[1]);
-                // Entferne das Phase-Tag aus der Nachricht
+                // Remove phase tag from message
                 $user_message = trim(preg_replace('/\[CURRENT_PHASE=\d+\]/', '', $user_message));
             }
 
-            // Wenn es eine Start-Nachricht ist, füge keine Benutzernachricht hinzu
+            // If it's a start message, don't add user message
             if ($user_message === 'start') {
-                // Füge einen Hinweis zur Phase 1 hinzu
+                // Add hint for phase 1
                 $messages[] = [
                     'role' => 'system',
-                    'content' => "Der Chat beginnt jetzt mit Phase 1. Bitte starte mit einer freundlichen Begrüßung und erkläre kurz, dass wir das Ikigai in vier Phasen erkunden werden."
+                    'content' => "The chat now begins with phase 1. Please start with a friendly greeting and briefly explain that we will explore the Ikigai in four phases."
                 ];
-            } else {
-                // Füge einen Hinweis zur aktuellen Phase hinzu
+            
+                // Add hint for current phase
                 $messages[] = [
                     'role' => 'system',
-                    'content' => "Wir befinden uns aktuell in Phase {$current_phase}. Bitte behalte das im Gespräch im Auge."
+                    'content' => "We are currently in phase {$current_phase}. Please keep this in mind during the conversation."
                 ];
                 $messages[] = [
                     'role' => 'user',
@@ -205,11 +205,11 @@ class WP_Ikigai_Block {
                 ];
             }
 
-            // Füge die bisherige Konversation hinzu
+            // Add previous conversation
             foreach ($conversation as $message) {
                 if (!isset($message['role']) || !isset($message['content'])) {
-                    self::debug_log('Ungültiges Nachrichtenformat', $message);
-                    wp_send_json_error(['message' => 'Ungültiges Nachrichtenformat in der Konversation.'], 400);
+                    self::debug_log('Invalid message format', $message);
+                    wp_send_json_error(['message' => __('Invalid message format in conversation.', 'wp-ikigai')], 400);
                     return;
                 }
                 $messages[] = [
@@ -218,7 +218,7 @@ class WP_Ikigai_Block {
                 ];
             }
 
-            // API-Anfrage vorbereiten
+            // Prepare API request
             $response = wp_remote_post('https://api.openai.com/v1/chat/completions', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $api_key,
@@ -235,54 +235,54 @@ class WP_Ikigai_Block {
                 'timeout' => 60,
             ]);
 
-            // Überprüfe HTTP-Fehler
+            // Check HTTP errors
             if (is_wp_error($response)) {
-                self::debug_log('WordPress HTTP Fehler', [
+                self::debug_log('WordPress HTTP error', [
                     'error' => $response->get_error_message(),
                     'data' => $response->get_error_data()
                 ]);
                 wp_send_json_error([
-                    'message' => 'HTTP Fehler: ' . $response->get_error_message(),
+                    'message' => __('HTTP Error: ', 'wp-ikigai') . $response->get_error_message(),
                     'details' => $response->get_error_data()
                 ], 500);
                 return;
             }
 
-            // Überprüfe HTTP Status
+            // Check HTTP status
             $status_code = wp_remote_retrieve_response_code($response);
             if ($status_code !== 200) {
                 $body = wp_remote_retrieve_body($response);
-                self::debug_log('API Fehler', [
+                self::debug_log('API error', [
                     'status' => $status_code,
                     'body' => $body
                 ]);
                 wp_send_json_error([
-                    'message' => 'API Fehler: ' . $status_code,
+                    'message' => __('API Error: ', 'wp-ikigai') . $status_code,
                     'details' => json_decode($body, true)
                 ], $status_code);
                 return;
             }
 
-            // Verarbeite die API-Antwort
+            // Process API response
             $body = json_decode(wp_remote_retrieve_body($response), true);
             if (json_last_error() !== JSON_ERROR_NONE) {
-                self::debug_log('JSON Decode Fehler bei API-Antwort', [
+                self::debug_log('JSON decode error in API response', [
                     'error' => json_last_error_msg(),
                     'body' => wp_remote_retrieve_body($response)
                 ]);
-                wp_send_json_error(['message' => 'Fehler beim Verarbeiten der API-Antwort'], 500);
+                wp_send_json_error(['message' => __('Error processing API response', 'wp-ikigai')], 500);
                 return;
             }
 
             if (!isset($body['choices'][0]['message']['content'])) {
-                self::debug_log('Ungültiges Antwortformat von der API', $body);
-                wp_send_json_error(['message' => 'Ungültiges Antwortformat von der API'], 500);
+                self::debug_log('Invalid response format from API', $body);
+                wp_send_json_error(['message' => __('Invalid response format from API', 'wp-ikigai')], 500);
                 return;
             }
 
             $assistant_message = $body['choices'][0]['message'];
             
-            // Wenn es eine Start-Nachricht war, füge keine Benutzernachricht zur Konversation hinzu
+            // If it was a start message, don't add user message to conversation
             if ($user_message !== 'start') {
                 $conversation[] = [
                     'role' => 'user',
@@ -290,7 +290,7 @@ class WP_Ikigai_Block {
                 ];
             }
             
-            // Füge die Antwort des Assistenten zur Konversation hinzu
+            // Add assistant's response to conversation
             $conversation[] = $assistant_message;
 
             wp_send_json_success([
@@ -299,12 +299,12 @@ class WP_Ikigai_Block {
             ]);
 
         } catch (Exception $e) {
-            self::debug_log('Unerwarteter Fehler', [
+            self::debug_log('Unexpected error', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
             wp_send_json_error([
-                'message' => 'Ein unerwarteter Fehler ist aufgetreten.',
+                'message' => __('An unexpected error occurred.', 'wp-ikigai'),
                 'details' => $e->getMessage()
             ], 500);
         }

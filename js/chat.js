@@ -1,29 +1,29 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('WP Ikigai: DOMContentLoaded Event ausgelöst');
+    console.log('WP Ikigai: DOMContentLoaded event triggered');
     
     const chatContainer = document.getElementById('wp-ikigai-chat');
     if (!chatContainer) {
-        console.error('WP Ikigai: Chat-Container nicht gefunden');
+        console.error('WP Ikigai: Chat container not found');
         return;
     }
-    console.log('WP Ikigai: Chat-Container gefunden');
+    console.log('WP Ikigai: Chat container found');
 
-    // Prüfe AJAX-Konfiguration
+    // Check AJAX configuration
     if (!window.wpIkigai || !window.wpIkigai.ajaxUrl || !window.wpIkigai.nonce) {
-        console.error('WP Ikigai: AJAX-Konfiguration fehlt:', window.wpIkigai);
+        console.error('WP Ikigai: AJAX configuration missing:', window.wpIkigai);
         const errorDiv = document.createElement('div');
         errorDiv.className = 'wp-ikigai-error';
         errorDiv.style.cssText = 'color: #dc3232; padding: 10px; margin: 10px 0; border: 1px solid #dc3232; border-radius: 4px; background: #fff;';
-        errorDiv.textContent = 'Fehler: AJAX-Konfiguration nicht gefunden';
+        errorDiv.textContent = 'Error: AJAX configuration not found';
         chatContainer.prepend(errorDiv);
         return;
     }
-    console.log('WP Ikigai: AJAX-Konfiguration gefunden:', {
+    console.log('WP Ikigai: AJAX configuration found:', {
         ajaxUrl: window.wpIkigai.ajaxUrl,
         nonceAvailable: !!window.wpIkigai.nonce
     });
 
-    // Hole alle notwendigen DOM-Elemente
+    // Get all necessary DOM elements
     const messagesContainer = chatContainer.querySelector('.wp-ikigai-chat-messages');
     const messageInput = chatContainer.querySelector('#wp-ikigai-message');
     const sendButton = chatContainer.querySelector('.wp-ikigai-send');
@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyIkigai = chatContainer.querySelector('.wp-ikigai-copy-ikigai');
     const feedbackButtons = chatContainer.querySelectorAll('.wp-ikigai-feedback-btn');
 
-    // Prüfe, ob alle Elemente vorhanden sind
+    // Check if all elements are present
     if (!messagesContainer || !messageInput || !sendButton || !feedbackContainer || !loadingIndicator) {
-        console.error('WP Ikigai: Fehlende Chat-Elemente');
+        console.error('WP Ikigai: Missing chat elements');
         return;
     }
 
@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function() {
     phaseIndicator.appendChild(progressBar);
 
     const phases = [
-        { id: 1, text: 'Was liebst du?' },
-        { id: 2, text: 'Was kannst du gut?' },
-        { id: 3, text: 'Was braucht die Welt?' },
-        { id: 4, text: 'Wofür würden Menschen zahlen?' }
+        { id: 1, text: 'What do you love?' },
+        { id: 2, text: 'What are you good at?' },
+        { id: 3, text: 'What does the world need?' },
+        { id: 4, text: 'For what would people pay?' }
     ];
 
     // Füge die Phasen-Anzeige zum Container hinzu

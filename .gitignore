@@ -1,4 +1,4 @@
-# WordPress Plugin spezifisch
+# WordPress Plugin specific
 wp-ikigai.zip
 
 # Node.js
@@ -7,26 +7,26 @@ npm-debug.log
 yarn-debug.log
 yarn-error.log
 
-# Build Verzeichnis
+# Build directory
 /build/
 
-# IDE & Editoren
+# IDE & Editors
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
 
-# Betriebssystem
+# Operating System
 .DS_Store
 Thumbs.db
 
-# Umgebungsvariablen
+# Environment variables
 .env
 .env.local
 .env.*.local
 
-# Temporäre Dateien
+# Temporary files
 *.log
 *.tmp
 *.temp 
