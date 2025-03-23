@@ -1,14 +1,10 @@
 <?php
 /**
- * PHPUnit bootstrap file
+ * PHPUnit bootstrap file.
  *
- * @package WP_Ikigai
+ * @package Ikigai_Finder
  */
 
-// Composer autoloader muss geladen sein.
-require_once dirname( __DIR__ ) . '/vendor/autoload.php';
-
-// Lade den WordPress Testrahmen.
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 
 if ( ! $_tests_dir ) {
@@ -16,23 +12,15 @@ if ( ! $_tests_dir ) {
 }
 
 if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
-	echo "Konnte WordPress Test Suite nicht finden. Stellen Sie sicher, dass die Umgebungsvariable WP_TESTS_DIR korrekt ist." . PHP_EOL;
+	echo "Could not find $_tests_dir/includes/functions.php\n";
 	exit( 1 );
 }
 
-// Gib das Plugin-Hauptverzeichnis an.
-define( 'WP_IKIGAI_DIR', dirname( __DIR__ ) );
+require_once $_tests_dir . '/includes/functions.php';
 
-// Starte den WordPress-Test-Bootstrap-Prozess.
-require_once $_tests_dir . '/includes/bootstrap.php';
-
-/**
- * Plugin manuell laden, da es normalerweise von WordPress geladen würde.
- */
 function _manually_load_plugin() {
-	require WP_IKIGAI_DIR . '/wp_ikigai.php';
+	require dirname( dirname( __FILE__ ) ) . '/ikigai-finder.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
 
-// Plugin-spezifische Test-Hilfsfunktionen hier initialisieren.
-require_once WP_IKIGAI_DIR . '/tests/test-helpers.php';
+require $_tests_dir . '/includes/bootstrap.php';

@@ -1,11 +1,16 @@
 {
-    "name": "wp_ikigai/wp_ikigai",
-    "description": "WordPress Plugin WP_Ikigai",
+    "name": "ikigai-finder/ikigai-finder",
+    "description": "WordPress Plugin Ikigai Finder",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
-    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Martin Kaffanke",
+            "email": "martin@kaffanke.info"
+        }
+    ],
     "require": {
-        "php": ">=8.2"
+        "php": ">=7.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
@@ -19,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "WP_Ikigai\\": "includes/"
+            "Ikigai_Finder\\": "includes/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "WP_Ikigai\\Tests\\": "tests/"
+            "Ikigai_Finder\\Tests\\": "tests/"
         }
     },
     "scripts": {

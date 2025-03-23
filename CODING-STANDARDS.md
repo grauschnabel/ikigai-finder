@@ -1,10 +1,12 @@
-# Coding Standards - WP_Ikigai
+# Coding Standards - Ikigai Finder
 
-Dieses Dokument beschreibt die Coding Standards für das WP_Ikigai-Plugin und wie man sicherstellt, dass der Code diesen Standards entspricht.
+## Einleitung
 
-## Übersicht
+Dieses Dokument beschreibt die Coding Standards für das Ikigai Finder-Plugin und wie man sicherstellt, dass der Code diesen Standards entspricht.
 
-Das WP_Ikigai-Plugin folgt den [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/), mit einigen projektspezifischen Anpassungen.
+## WordPress Coding Standards
+
+Das Ikigai Finder-Plugin folgt den [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/), mit einigen projektspezifischen Anpassungen.
 
 Wichtige Punkte:
 - Tabs für die Einrückung, keine Spaces

@@ -1,6 +1,6 @@
 {
-  "name": "wp-ikigai",
-  "version": "0.1.5",
+  "name": "ikigai-finder",
+  "version": "0.1.7",
   "description": "A WordPress plugin for Ikigai discovery using ChatGPT",
   "scripts": {
     "start": "wp-scripts start",

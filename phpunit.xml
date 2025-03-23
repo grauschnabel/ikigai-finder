@@ -12,9 +12,7 @@
   <coverage>
     <include>
       <directory suffix=".php">./includes</directory>
-      <directory suffix=".php">./admin</directory>
-      <directory suffix=".php">./public</directory>
-      <file>wp_ikigai.php</file>
+      <file>ikigai-finder.php</file>
     </include>
     <exclude>
       <directory>./tests</directory>
@@ -23,7 +21,7 @@
     </exclude>
   </coverage>
   <testsuites>
-    <testsuite name="WP_Ikigai">
+    <testsuite name="Ikigai_Finder">
       <directory suffix="Test.php">./tests</directory>
     </testsuite>
   </testsuites>

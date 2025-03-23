@@ -1,55 +1,55 @@
 /**
- * Chat-Interaktionsskript für WP-Ikigai.
+ * Chat-Interaktionsskript für Ikigai Finder.
  *
  * Dieses Skript behandelt die Chat-Funktionalität zwischen Benutzer und Bot.
  *
- * @package WP_Ikigai
+ * @package Ikigai_Finder
  */
 
 document.addEventListener(
 	'DOMContentLoaded',
 	function () {
-		console.log( 'WP Ikigai: DOMContentLoaded event triggered' );
+		console.log( 'Ikigai Finder: DOMContentLoaded event triggered' );
 
-		const chatContainer = document.getElementById( 'wp-ikigai-chat' );
+		const chatContainer = document.getElementById( 'ikigai-finder-chat' );
 		if ( ! chatContainer) {
-			console.error( 'WP Ikigai: Chat container not found' );
+			console.error( 'Ikigai Finder: Chat container not found' );
 			return;
 		}
-		console.log( 'WP Ikigai: Chat container found' );
+		console.log( 'Ikigai Finder: Chat container found' );
 
 		// Check AJAX configuration
-		if ( ! window.wpIkigai || ! window.wpIkigai.ajaxUrl || ! window.wpIkigai.nonce) {
-			console.error( 'WP Ikigai: AJAX configuration missing:', window.wpIkigai );
+		if ( ! window.ikigaiFinder || ! window.ikigaiFinder.ajaxUrl || ! window.ikigaiFinder.nonce) {
+			console.error( 'Ikigai Finder: AJAX configuration missing:', window.ikigaiFinder );
 			const errorDiv		   = document.createElement( 'div' );
-			errorDiv.className	   = 'wp-ikigai-error';
+			errorDiv.className	   = 'ikigai-finder-error';
 			errorDiv.style.cssText = 'color: #dc3232; padding: 10px; margin: 10px 0; border: 1px solid #dc3232; border-radius: 4px; background: #fff;';
 			errorDiv.textContent   = 'Error: AJAX configuration not found';
 			chatContainer.prepend( errorDiv );
 			return;
 		}
 		console.log(
-			'WP Ikigai: AJAX configuration found:',
+			'Ikigai Finder: AJAX configuration found:',
 			{
-				ajaxUrl: window.wpIkigai.ajaxUrl,
-				nonceAvailable: ! ! window.wpIkigai.nonce
+				ajaxUrl: window.ikigaiFinder.ajaxUrl,
+				nonceAvailable: ! ! window.ikigaiFinder.nonce
 			}
 		);
 
 		// Get all necessary DOM elements
-		const messagesContainer = chatContainer.querySelector( '.wp-ikigai-chat-messages' );
-		const messageInput		= chatContainer.querySelector( '#wp-ikigai-message' );
-		const sendButton		= chatContainer.querySelector( '.wp-ikigai-send' );
-		const feedbackContainer = chatContainer.querySelector( '.wp-ikigai-feedback' );
-		const loadingIndicator	= chatContainer.querySelector( '.wp-ikigai-loading' );
-		const copyChat			= chatContainer.querySelector( '.wp-ikigai-copy-chat' );
-		const copyIkigai		= chatContainer.querySelector( '.wp-ikigai-copy-ikigai' );
-		const feedbackButtons	= chatContainer.querySelectorAll( '.wp-ikigai-feedback-btn' );
-		const resetButton       = document.getElementById( 'wp-ikigai-reset-button' );
+		const messagesContainer = chatContainer.querySelector( '.ikigai-finder-chat-messages' );
+		const messageInput		= chatContainer.querySelector( '#ikigai-finder-message' );
+		const sendButton		= chatContainer.querySelector( '.ikigai-finder-send' );
+		const feedbackContainer = chatContainer.querySelector( '.ikigai-finder-feedback' );
+		const loadingIndicator	= chatContainer.querySelector( '.ikigai-finder-loading' );
+		const copyChat			= chatContainer.querySelector( '.ikigai-finder-copy-chat' );
+		const copyIkigai		= chatContainer.querySelector( '.ikigai-finder-copy-ikigai' );
+		const feedbackButtons	= chatContainer.querySelectorAll( '.ikigai-finder-feedback-btn' );
+		const resetButton       = document.getElementById( 'ikigai-finder-reset-button' );
 
 		// Check if all elements are present
 		if ( ! messagesContainer || ! messageInput || ! sendButton || ! feedbackContainer || ! loadingIndicator) {
-			console.error( 'WP Ikigai: Missing chat elements' );
+			console.error( 'Ikigai Finder: Missing chat elements' );
 			return;
 		}
 
@@ -60,8 +60,8 @@ document.addEventListener(
 
 		// Erstelle die Phasen-Anzeige
 		const phaseIndicator     = document.createElement( 'div' );
-		phaseIndicator.id        = 'wp-ikigai-phase-indicator';
-		phaseIndicator.className = 'wp-ikigai-phase-indicator';
+		phaseIndicator.id        = 'ikigai-finder-phase-indicator';
+		phaseIndicator.className = 'ikigai-finder-phase-indicator';
 
 		// Füge den Fortschrittsbalken hinzu.
 		const progressBar     = document.createElement( 'div' );
@@ -94,7 +94,7 @@ document.addEventListener(
 		chatContainer.insertBefore( phaseIndicator, feedbackContainer );
 
 		function updatePhaseIndicator(phase) {
-			console.log('WP Ikigai: Aktualisiere Phasenindikator auf:', phase);
+			console.log('Ikigai Finder: Aktualisiere Phasenindikator auf:', phase);
 
 			// Konvertiere Phase zu Nummer, falls es ein String ist
 			let numericPhase = phase;
@@ -141,12 +141,12 @@ document.addEventListener(
 				phaseMatch = message.match(/\[CURRENT_PHASE=(\d+|done)\]/);
 			}
 
-			console.log('WP Ikigai: Extrahierte Phase:', phaseMatch ? phaseMatch[1] : 'keine');
+			console.log('Ikigai Finder: Extrahierte Phase:', phaseMatch ? phaseMatch[1] : 'keine');
 			return phaseMatch ? phaseMatch[1] : null;
 		}
 
 		function addMessage(message, isUser = false) {
-			console.log('WP Ikigai: Füge Nachricht hinzu:', { message, isUser });
+			console.log('Ikigai Finder: Füge Nachricht hinzu:', { message, isUser });
 			const messageElement = document.createElement('div');
 			messageElement.classList.add('message', isUser ? 'user-message' : 'bot-message');
 
@@ -157,7 +157,7 @@ document.addEventListener(
 				const newPhase = extractPhase(message);
 				if (newPhase) {
 					currentPhase = newPhase === 'done' ? 'done' : parseInt(newPhase);
-					console.log('WP Ikigai: Aktualisiere auf Phase:', currentPhase);
+					console.log('Ikigai Finder: Aktualisiere auf Phase:', currentPhase);
 					updatePhaseIndicator(currentPhase);
 					// Entferne das Phase-Tag aus der Nachricht
 					cleanMessage = message.replace(/\[PHASE=(\d+|done)\]/, '').trim();
@@ -167,14 +167,14 @@ document.addEventListener(
 				// Prüfe, ob ein Phasenwechsel im Text erwähnt wird
 				if (cleanMessage.includes('Phase 2') || cleanMessage.includes('nächsten Phase') ||
 				    cleanMessage.includes('zweiten Phase')) {
-					console.log('WP Ikigai: Phasenwechsel zu Phase 2 im Text erkannt');
+					console.log('Ikigai Finder: Phasenwechsel zu Phase 2 im Text erkannt');
 					if (currentPhase === 1 || currentPhase === '1') {
 						currentPhase = 2;
 						updatePhaseIndicator(currentPhase);
 					}
 				} else if (cleanMessage.includes('Phase 3') || cleanMessage.includes('dritten Phase') ||
 				    (cleanMessage.includes('nächsten Phase') && (currentPhase === 2 || currentPhase === '2'))) {
-					console.log('WP Ikigai: Phasenwechsel zu Phase 3 im Text erkannt');
+					console.log('Ikigai Finder: Phasenwechsel zu Phase 3 im Text erkannt');
 					if (currentPhase === 2 || currentPhase === '2') {
 						currentPhase = 3;
 						updatePhaseIndicator(currentPhase);
@@ -182,14 +182,14 @@ document.addEventListener(
 				} else if (cleanMessage.includes('Phase 4') || cleanMessage.includes('vierten Phase') ||
 				    (cleanMessage.includes('nächsten Phase') && (currentPhase === 3 || currentPhase === '3')) ||
 				    cleanMessage.includes('letzten Phase')) {
-					console.log('WP Ikigai: Phasenwechsel zu Phase 4 im Text erkannt');
+					console.log('Ikigai Finder: Phasenwechsel zu Phase 4 im Text erkannt');
 					if (currentPhase === 3 || currentPhase === '3') {
 						currentPhase = 4;
 						updatePhaseIndicator(currentPhase);
 					}
 				} else if (cleanMessage.includes('abgeschlossen') && cleanMessage.includes('Ikigai') ||
 				    cleanMessage.includes('alle vier Bereiche') || cleanMessage.includes('alle Phasen')) {
-					console.log('WP Ikigai: Phasenwechsel zu "done" im Text erkannt');
+					console.log('Ikigai Finder: Phasenwechsel zu "done" im Text erkannt');
 					if (currentPhase === 4 || currentPhase === '4') {
 						currentPhase = 'done';
 						updatePhaseIndicator(currentPhase);
@@ -198,7 +198,7 @@ document.addEventListener(
 
 				// Prüfe, ob marked verfügbar ist
 				if (typeof marked !== 'undefined') {
-					console.log( 'WP Ikigai: Marked.js verfügbar, parse Markdown' );
+					console.log( 'Ikigai Finder: Marked.js verfügbar, parse Markdown' );
 					marked.setOptions(
 						{
 							breaks: true,
@@ -210,7 +210,7 @@ document.addEventListener(
 					);
 					messageElement.innerHTML = marked.parse( cleanMessage );
 				} else {
-					console.warn( 'WP Ikigai: Marked.js nicht verfügbar, verwende Plaintext' );
+					console.warn( 'Ikigai Finder: Marked.js nicht verfügbar, verwende Plaintext' );
 					messageElement.textContent = cleanMessage;
 				}
 			} else {
@@ -249,91 +249,87 @@ document.addEventListener(
 			}
 
 			isProcessing = true;
-			setLoading( true );
-
-			// Füge die Benutzernachricht zuerst hinzu, es sei denn, es ist eine Start-Nachricht
-			if (msg && message !== 'start') {
-				addMessage( msg, true );
-			}
+			setLoading(true);
 
 			try {
-				// Sende die Nachricht an das Backend.
-				// Füge die aktuelle Phase zur Nachricht hinzu.
-				const messageWithPhase = message === 'start' ? 'start' : `[CURRENT_PHASE=${currentPhase}] ${msg}`;
+				// Füge die Nachricht zur Konversation hinzu
+				if (msg !== 'start') {
+					addMessage(msg, true);
+					conversation.push({
+						role: 'user',
+						content: msg
+					});
+				}
 
-				const formData = new URLSearchParams();
-				formData.append( 'action', 'wp_ikigai_chat' );
-				formData.append( 'message', messageWithPhase );
-				formData.append( 'conversation', JSON.stringify(conversation) );
-				formData.append( '_wpnonce', window.wpIkigai.nonce );
-
-				const response = await fetch(
-					window.wpIkigai.ajaxUrl,
-					{
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/x-www-form-urlencoded'
-						},
-						body: formData
-					}
-				);
+				// Sende die Nachricht an den Server
+				const response = await fetch(window.ikigaiFinder.ajaxUrl, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					body: new URLSearchParams({
+						action: 'ikigai_finder_chat',
+						nonce: window.ikigaiFinder.nonce,
+						message: msg,
+						conversation: JSON.stringify(conversation)
+					})
+				});
 
 				const data = await response.json();
 
-				if ( ! data.success) {
-					throw new Error( data.data?.message || 'Unbekannter Fehler' );
+				if (data.success) {
+					// Füge die Antwort zur Konversation hinzu
+					addMessage(data.data.message);
+					conversation.push({
+						role: 'assistant',
+						content: data.data.message
+					});
+
+					// Zeige Feedback-Buttons an
+					feedbackContainer.style.display = 'block';
+				} else {
+					// Zeige Fehlermeldung an
+					const errorMessage = data.data.message || 'Ein Fehler ist aufgetreten.';
+					addMessage(errorMessage);
 				}
-
-				// Verarbeite die Bot-Antwort
-				let botMessage = data.data.message;
-
-				// Füge die Bot-Antwort hinzu
-				addMessage( botMessage, false );
-
-				// Aktualisiere die Konversation
-				conversation = data.data.conversation;
-
-				messageInput.value = '';
-				messageInput.focus();
-
 			} catch (error) {
-				console.error( 'WP Ikigai: Fehler:', error );
-				addMessage( 'Entschuldigung, es gab einen technischen Fehler: ' + error.message, false );
+				console.error('Ikigai Finder: Fehler beim Senden der Nachricht:', error);
+				addMessage('Ein Fehler ist aufgetreten. Bitte versuche es später erneut.');
 			} finally {
-				setLoading( false );
 				isProcessing = false;
+				setLoading(false);
 			}
 		}
 
-		messageInput.addEventListener(
-			'keypress',
-			(e) => {
-				if (e.key === 'Enter' && ! e.shiftKey) {
-					e.preventDefault();
-					const message = messageInput.value.trim();
-					if (message) {
-						sendMessage( message );
-					}
-				}
+		// Event Listeners
+		sendButton.addEventListener('click', () => sendMessage());
+		messageInput.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter' && !e.shiftKey) {
+				e.preventDefault();
+				sendMessage();
 			}
-		);
+		});
 
-		sendButton.addEventListener(
-			'click',
-			() => {
-				const message = messageInput.value.trim();
-				if (message) {
-					sendMessage( message );
-				}
-			}
-		);
+		// Feedback-Buttons
+		feedbackButtons.forEach(button => {
+			button.addEventListener('click', () => {
+				feedbackContainer.style.display = 'none';
+				// Hier können Sie das Feedback an den Server senden
+			});
+		});
 
-		// Starte den Chat automatisch
-		setTimeout(
-			() => {
+		// Reset-Button
+		if (resetButton) {
+			resetButton.addEventListener('click', () => {
+				conversation = [];
+				messagesContainer.innerHTML = '';
+				currentPhase = 1;
+				updatePhaseIndicator(currentPhase);
 				sendMessage('start');
-			},
-			500
-		);
+			});
+		}
+
+		// Starte den Chat
+		sendMessage('start');
 	}
 );
