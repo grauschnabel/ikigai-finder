@@ -54,7 +54,7 @@ For optimal results, users should:
 
 - Node.js and npm
 - WordPress 6.7.0, 6.7.1, or 6.7.2
-- PHP 8.1 or 8.2
+- PHP 8.2
 
 ### Developer Setup
 
@@ -89,7 +89,7 @@ GitHub: [@grauschnabel](https://github.com/grauschnabel)
 ## Changelog
 
 ### 0.1.5
-- Added comprehensive test matrix for PHP 8.1/8.2 and WordPress 6.7.0/6.7.1/6.7.2
+- Added comprehensive test matrix for PHP 8.2 and WordPress 6.7.0/6.7.1/6.7.2
 - Improved CI/CD pipeline
 - Enhanced code quality checks
 - Updated dependencies
