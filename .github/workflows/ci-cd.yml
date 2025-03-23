@@ -1,8 +1,8 @@
 name: WordPress Plugin CI/CD
-
 on:
   push:
-    branches: [ main, develop, feature/** ]
+    branches: [ main, develop, feature/* ]
+    tags: [ 'v*' ]  # Tag-Trigger hinzugefügt
   pull_request:
     branches: [ main, develop ]
 
@@ -13,94 +13,67 @@ jobs:
       matrix:
         php: [8.2]
         wordpress: ['6.7.2']
-    
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: mbstring, intl, json, mysql, zip
-        tools: composer:v2, phpunit, wp-cli
-        coverage: xdebug
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    - name: Check PHP Version
-      run: php -v
-
-    - name: Check Composer Version
-      run: composer -V
-
-    - name: Check PHP CodeSniffer Version
-      run: vendor/bin/phpcs -i
-
-    - name: Run PHP CodeSniffer
-      run: vendor/bin/phpcs -d memory_limit=1024M --standard=phpcs.xml
-
-    - name: Run PHP Compatibility Check
-      run: composer run phpcompat
-
-    - name: Setup WordPress Test Environment
-      run: |
-        bash bin/install-wp-tests.sh wordpress_test root '' localhost ${{ matrix.wordpress }}
-        
-    - name: Run PHPUnit Tests
-      run: composer run test
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, intl, json, mysql, zip
+          tools: composer:v2, phpunit, wp-cli
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+      - name: Run PHP CodeSniffer
+        run: vendor/bin/phpcs -d memory_limit=1024M
+      - name: Run PHP Compatibility Check
+        run: composer run phpcompat
+      - name: Setup WordPress Test Environment
+        run: |
+          bash bin/install-wp-tests.sh wordpress_test root '' localhost ${{ matrix.wordpress }}
+      - name: Run PHPUnit Tests
+        run: composer run test
 
   build:
     needs: php-tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
-    
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/'))
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        extensions: mbstring, intl, json, zip
-        tools: composer:v2
-
-    - name: Install dependencies
-      run: composer install --no-dev --prefer-dist --no-progress
-
-    - name: Build Plugin ZIP
-      run: |
-        mkdir wp-ikigai
-        cp -r build includes languages js css src package.json README.md wp-ikigai.php wp-ikigai/
-        zip -r wp-ikigai.zip wp-ikigai
-        rm -rf wp-ikigai
-
-    - name: Upload ZIP as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: wp-ikigai
-        path: wp-ikigai.zip
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'  # Auf 8.2 aktualisiert, da min. PHP 8.1
+          extensions: mbstring, intl, json, zip
+          tools: composer:v2
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --no-progress
+      - name: Build Plugin ZIP
+        run: |
+          mkdir wp-ikigai
+          cp -r build includes languages js css src package.json README.md wp-ikigai.php wp-ikigai/
+          zip -r wp-ikigai.zip wp-ikigai
+          rm -rf wp-ikigai
+      - name: Upload ZIP as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: wp-ikigai
+          path: wp-ikigai.zip
 
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     steps:
-    - uses: actions/checkout@v3
-
-    - name: Download ZIP artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: wp-ikigai
-
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: wp-ikigai.zip
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      - name: Download ZIP artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: wp-ikigai
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: wp-ikigai.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

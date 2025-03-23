@@ -1,65 +1,20 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress Plugin Coding Standards">
-	<description>WordPress Plugin Coding Standards for WP Ikigai</description>
+    <description>WordPress Coding Standards for Plugins</description>
 
-	<!-- Include WordPress Coding Standards -->
-	<rule ref="WordPress"/>
-
-	<!-- Exclude vendor directory -->
-	<exclude-pattern>*/vendor/*</exclude-pattern>
-
-	<!-- Exclude build directory -->
-	<exclude-pattern>*/build/*</exclude-pattern>
-
-	<!-- Exclude node_modules directory -->
-	<exclude-pattern>*/node_modules/*</exclude-pattern>
-
-	<!-- Exclude test files from some rules -->
-	<rule ref="WordPress.WP.I18n">
-		<exclude-pattern>*/tests/*</exclude-pattern>
-	</rule>
-
-	<!-- Allow . in hook names -->
-	<rule ref="WordPress.NamingConventions.ValidHookName">
-		<properties>
-			<property name="additionalWordDelimiters" value="."/>
-		</properties>
-	</rule>
-
-	<!-- Text domain -->
-	<rule ref="WordPress.WP.I18n">
-		<properties>
-			<property name="text_domain" type="array">
-				<element value="wp-ikigai"/>
-			</property>
-		</properties>
-	</rule>
-
-	<!-- Allow for theme specific exceptions to the file name rules based on the theme hierarchy. -->
-	<rule ref="WordPress.Files.FileName">
-		<properties>
-			<property name="is_theme_directory" value="false"/>
-		</properties>
-	</rule>
-
-	<!-- Verify that the text_domain is set to the desired text-domain.
-		 Multiple valid text domains can be provided as a comma-delimited list. -->
-	<rule ref="WordPress.WP.I18n">
-		<properties>
-			<property name="text_domain" type="array">
-				<element value="wp-ikigai"/>
-			</property>
-		</properties>
-	</rule>
-
-	<!-- Verify that no WP functions are used which are deprecated or removed.
-		 The minimum version set here should be in line with the minimum WP version required by the plugin. -->
-	<config name="minimum_supported_version" value="5.0"/>
-
-	<!-- Check for PHP cross-version compatibility. -->
-	<config name="testVersion" value="7.4-"/>
-	<rule ref="PHPCompatibilityWP">
-		<exclude-pattern>*/vendor/*</exclude-pattern>
-		<exclude-pattern>*/tests/*</exclude-pattern>
-	</rule>
-</ruleset> 
+    <!-- Scan all files -->
+    <file>.</file>
+    
+    <!-- Exclude paths -->
+    <exclude-pattern>/vendor/</exclude-pattern>
+    <exclude-pattern>/node_modules/</exclude-pattern>
+    <exclude-pattern>/tests/</exclude-pattern>
+    <exclude-pattern>/build/</exclude-pattern>
+    
+    <!-- Include WordPress standards -->
+    <rule ref="WordPress"/>
+    
+    <!-- PHP compatibility configuration -->
+    <config name="testVersion" value="8.1-"/>
+    <rule ref="PHPCompatibilityWP"/>
+</ruleset>

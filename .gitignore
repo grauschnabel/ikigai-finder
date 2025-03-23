@@ -1,33 +1,40 @@
-# WordPress Plugin specific
-wp-ikigai.zip
+# Composer
+/vendor/
+composer.lock
 
-# Node.js
-node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
+# Node
+/node_modules/
+package-lock.json
 
-# Build directory
+# Build
 /build/
+/dist/
 
-# IDE & Editors
+# IDE
 .idea/
 .vscode/
-*.swp
-*.swo
-*~
+*.sublime-project
+*.sublime-workspace
 
-# Operating System
+# OS
 .DS_Store
 Thumbs.db
 
-# Environment variables
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+
+# WordPress Plugin specific
+wp-ikigai.zip
 
 # Temporary files
-*.log
 *.tmp
 *.temp
 
