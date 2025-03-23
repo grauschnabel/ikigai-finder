@@ -39,4 +39,34 @@ wp-ikigai.zip
 *.temp
 
 # Docker Compose
-docker-compose.yml 
+docker-compose.yml
+# Composer
+/vendor/
+composer.lock
+
+# Node.js
+/node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# WordPress
+wp-config.php
+/wp-content/
+
+# PHPUnit
+.phpunit.result.cache
+/coverage-report/
+
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build Dateien
+/build/
+/dist/
+*.zip

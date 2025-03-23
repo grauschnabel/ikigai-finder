@@ -77,7 +77,7 @@ class WP_Ikigai_Block {
 		if ( has_block( 'wp-ikigai/chat-block' ) ) {
 			// Dashicons for copy buttons.
 			wp_enqueue_style( 'dashicons' );
-			
+
 			// Marked.js for Markdown parsing.
 			wp_enqueue_script(
 				'marked',
@@ -227,7 +227,7 @@ class WP_Ikigai_Block {
 
 			// Process user message.
 			$user_message = sanitize_text_field( $_POST['message'] );
-			
+
 			// Extract current phase from message if present.
 			$current_phase = 1;
 			if ( preg_match( '/\[CURRENT_PHASE=(\d+)\]/', $user_message, $matches ) ) {
@@ -243,7 +243,7 @@ class WP_Ikigai_Block {
 					'role'    => 'system',
 					'content' => 'The chat now begins with phase 1. Please start with a friendly greeting and briefly explain that we will explore the Ikigai in four phases.',
 				);
-			
+
 				// Add hint for current phase.
 				$messages[] = array(
 					'role'    => 'system',
@@ -342,7 +342,7 @@ class WP_Ikigai_Block {
 			}
 
 			$assistant_message = $body['choices'][0]['message'];
-			
+
 			// If it was a start message, don't add user message to conversation
 			if ($user_message !== 'start') {
 				$conversation[] = [
@@ -350,7 +350,7 @@ class WP_Ikigai_Block {
 					'content' => $user_message
 				];
 			}
-			
+
 			// Add assistant's response to conversation
 			$conversation[] = $assistant_message;
 
@@ -370,4 +370,4 @@ class WP_Ikigai_Block {
 			], 500);
 		}
 	}
-} 
+}

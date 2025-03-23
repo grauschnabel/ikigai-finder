@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('WP Ikigai: DOMContentLoaded event triggered');
-    
+
     const chatContainer = document.getElementById('wp-ikigai-chat');
     if (!chatContainer) {
         console.error('WP Ikigai: Chat container not found');
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Erstelle die Phasen-Anzeige
     const phaseIndicator = document.createElement('div');
     phaseIndicator.className = 'wp-ikigai-phase-indicator';
-    
+
     // Füge den Fortschrittsbalken hinzu
     const progressBar = document.createElement('div');
     progressBar.className = 'phase-progress';
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updatePhaseIndicator(phase) {
         const allPhases = phaseIndicator.querySelectorAll('.phase-item');
         const progressBar = phaseIndicator.querySelector('.phase-progress');
-        
+
         allPhases.forEach((item, index) => {
             item.classList.remove('active', 'completed');
             if (phase === 'done') {
@@ -114,9 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('WP Ikigai: Füge Nachricht hinzu:', { message, isUser });
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${isUser ? 'user-message' : 'bot-message'}`;
-        
+
         let cleanMessage = message;
-        
+
         if (!isUser) {
             // Extrahiere und aktualisiere die Phase
             const newPhase = extractPhase(message);
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Verarbeite die Bot-Antwort
             let botMessage = data.data.message;
-            
+
             if (message) {
                 addMessage(message, true);
             }
@@ -232,4 +232,4 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         sendMessage();
     }, 500);
-}); 
+});

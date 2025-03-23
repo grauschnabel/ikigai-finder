@@ -6,7 +6,7 @@ registerBlockType('wp-ikigai/chat-block', {
     icon: 'format-chat',
     category: 'widgets',
     attributes: {},
-    
+
     edit: function() {
         return (
             <div className="wp-ikigai-chat-preview">
@@ -19,4 +19,4 @@ registerBlockType('wp-ikigai/chat-block', {
     save: function() {
         return null;
     }
-}); 
+});

@@ -192,10 +192,10 @@ class WP_Ikigai_Settings {
 	public function render_api_key_field() {
 		$api_key = get_option( 'wp_ikigai_openai_key' );
 		?>
-		<input type="password" 
-			   id="wp_ikigai_openai_key" 
-			   name="wp_ikigai_openai_key" 
-			   value="<?php echo esc_attr( $api_key ); ?>" 
+		<input type="password"
+			   id="wp_ikigai_openai_key"
+			   name="wp_ikigai_openai_key"
+			   value="<?php echo esc_attr( $api_key ); ?>"
 			   class="regular-text"
 			   autocomplete="new-password">
 		<p class="description">
@@ -257,7 +257,7 @@ class WP_Ikigai_Settings {
 		document.addEventListener('DOMContentLoaded', function() {
 			var promptField = document.getElementById('wp_ikigai_system_prompt');
 			var defaultPrompt = <?php echo wp_json_encode( $default_prompt ); ?>;
-			
+
 			document.querySelector('button.button').addEventListener('click', function() {
 				promptField.value = defaultPrompt;
 				promptField.style.height = 'auto';
@@ -428,4 +428,4 @@ Remember to:
 - Avoid giving direct advice
 - Let users discover their own answers';
 	}
-} 
+}
