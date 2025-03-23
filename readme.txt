@@ -1,12 +1,14 @@
 === WP Ikigai Finder ===
 Contributors: martinkaffanke
-Tags: ikigai, chatgpt, openai, ai, coach, life purpose
+Tags: ikigai, chatgpt, openai, ai, life purpose
 Requires at least: 5.6
-Tested up to: 6.4
-Stable tag: 0.1.6
+Tested up to: 6.7
+Stable tag: 0.1.7
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: wp-ikigai
+Domain Path: /languages
 
 A WordPress plugin that provides an AI-powered Ikigai Finder to guide users through their personal Ikigai discovery process.
 
@@ -63,6 +65,12 @@ For best results, we recommend GPT-4. GPT-3.5-Turbo also works, but GPT-4 provid
 
 == Changelog ==
 
+= 0.1.7 =
+* Fixed plugin installation issues
+* Updated tested up to WordPress 6.7
+* Optimized readme.txt for WordPress plugin directory
+* Fixed text domain configuration
+
 = 0.1.6 =
 * Performance improvements and bug fixes
 
@@ -74,6 +82,9 @@ For best results, we recommend GPT-4. GPT-3.5-Turbo also works, but GPT-4 provid
 * Initial public release
 
 == Upgrade Notice ==
+
+= 0.1.7 =
+This version fixes installation issues and updates compatibility information.
 
 = 0.1.6 =
 This version contains important performance improvements and bug fixes.
