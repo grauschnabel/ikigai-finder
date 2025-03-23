@@ -7,6 +7,8 @@ on:
       - 'feature/**'
       - 'bugfix/**'
       - 'hotfix/**'
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches:
       - main
@@ -50,11 +52,20 @@ jobs:
 
   build:
     needs: php
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Setup PHP for build
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        tools: composer:v2
+
+    - name: Install Production Dependencies
+      run: composer install --no-dev --prefer-dist --no-progress --optimize-autoloader
 
     - name: Create Release ZIP
       run: |
@@ -68,3 +79,24 @@ jobs:
       with:
         name: plugin-build
         path: wp-ikigai.zip
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build
+      uses: actions/download-artifact@v3
+      with:
+        name: plugin-build
+
+    - name: WordPress.org Plugin Deploy
+      uses: 10up/action-wordpress-plugin-deploy@stable
+      env:
+        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        SLUG: wp-ikigai
