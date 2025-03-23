@@ -35,7 +35,7 @@ class WP_Ikigai_Block {
 
 		wp_register_script(
 			'wp-ikigai-block-editor',
-			plugins_url( 'build/index.js', dirname( __FILE__ ) ),
+			plugins_url( 'build/index.js', __DIR__ ),
 			array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n' ),
 			WP_IKIGAI_VERSION,
 			true
@@ -43,12 +43,12 @@ class WP_Ikigai_Block {
 
 		wp_register_style(
 			'wp-ikigai-block-editor-style',
-			plugins_url( 'css/editor.css', dirname( __FILE__ ) )
+			plugins_url( 'css/editor.css', __DIR__ )
 		);
 
 		wp_register_style(
 			'wp-ikigai-block-style',
-			plugins_url( 'css/style.css', dirname( __FILE__ ) ),
+			plugins_url( 'css/style.css', __DIR__ ),
 			array(),
 			WP_IKIGAI_VERSION
 		);
@@ -56,9 +56,9 @@ class WP_Ikigai_Block {
 		register_block_type(
 			'wp-ikigai/chat-block',
 			array(
-				'editor_script' => 'wp-ikigai-block-editor',
-				'editor_style'  => 'wp-ikigai-block-editor-style',
-				'style'         => 'wp-ikigai-block-style',
+				'editor_script'   => 'wp-ikigai-block-editor',
+				'editor_style'    => 'wp-ikigai-block-editor-style',
+				'style'           => 'wp-ikigai-block-style',
 				'render_callback' => array( __CLASS__, 'render_block' ),
 			)
 		);
@@ -89,7 +89,7 @@ class WP_Ikigai_Block {
 
 			wp_enqueue_script(
 				'wp-ikigai-chat',
-				plugins_url( 'js/chat.js', dirname( __FILE__ ) ),
+				plugins_url( 'js/chat.js', __DIR__ ),
 				array( 'jquery', 'marked' ),
 				WP_IKIGAI_VERSION,
 				true
@@ -117,7 +117,7 @@ class WP_Ikigai_Block {
 		// Register and load frontend assets.
 		wp_register_script(
 			'wp-ikigai-chat',
-			plugins_url( 'js/chat.js', dirname( __FILE__ ) ),
+			plugins_url( 'js/chat.js', __DIR__ ),
 			array( 'jquery' ),
 			WP_IKIGAI_VERSION,
 			true
@@ -209,7 +209,7 @@ class WP_Ikigai_Block {
 				self::debug_log(
 					'JSON decode error',
 					array(
-						'error' => json_last_error_msg(),
+						'error'    => json_last_error_msg(),
 						'raw_data' => $_POST['conversation'],
 					)
 				);
@@ -301,7 +301,7 @@ class WP_Ikigai_Block {
 				);
 				wp_send_json_error(
 					array(
-						'message'  => __( 'HTTP Error: ', 'wp-ikigai' ) . $response->get_error_message(),
+						'message' => __( 'HTTP Error: ', 'wp-ikigai' ) . $response->get_error_message(),
 						'details' => $response->get_error_data(),
 					),
 					500
@@ -310,64 +310,81 @@ class WP_Ikigai_Block {
 			}
 
 			// Check HTTP status
-			$status_code = wp_remote_retrieve_response_code($response);
-			if ($status_code !== 200) {
-				$body = wp_remote_retrieve_body($response);
-				self::debug_log('API error', [
-					'status' => $status_code,
-					'body' => $body
-				]);
-				wp_send_json_error([
-					'message' => __('API Error: ', 'wp-ikigai') . $status_code,
-					'details' => json_decode($body, true)
-				], $status_code);
+			$status_code = wp_remote_retrieve_response_code( $response );
+			if ( $status_code !== 200 ) {
+				$body = wp_remote_retrieve_body( $response );
+				self::debug_log(
+					'API error',
+					array(
+						'status' => $status_code,
+						'body'   => $body,
+					)
+				);
+				wp_send_json_error(
+					array(
+						'message' => __( 'API Error: ', 'wp-ikigai' ) . $status_code,
+						'details' => json_decode( $body, true ),
+					),
+					$status_code
+				);
 				return;
 			}
 
 			// Process API response
-			$body = json_decode(wp_remote_retrieve_body($response), true);
-			if (json_last_error() !== JSON_ERROR_NONE) {
-				self::debug_log('JSON decode error in API response', [
-					'error' => json_last_error_msg(),
-					'body' => wp_remote_retrieve_body($response)
-				]);
-				wp_send_json_error(['message' => __('Error processing API response', 'wp-ikigai')], 500);
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( json_last_error() !== JSON_ERROR_NONE ) {
+				self::debug_log(
+					'JSON decode error in API response',
+					array(
+						'error' => json_last_error_msg(),
+						'body'  => wp_remote_retrieve_body( $response ),
+					)
+				);
+				wp_send_json_error( array( 'message' => __( 'Error processing API response', 'wp-ikigai' ) ), 500 );
 				return;
 			}
 
-			if (!isset($body['choices'][0]['message']['content'])) {
-				self::debug_log('Invalid response format from API', $body);
-				wp_send_json_error(['message' => __('Invalid response format from API', 'wp-ikigai')], 500);
+			if ( ! isset( $body['choices'][0]['message']['content'] ) ) {
+				self::debug_log( 'Invalid response format from API', $body );
+				wp_send_json_error( array( 'message' => __( 'Invalid response format from API', 'wp-ikigai' ) ), 500 );
 				return;
 			}
 
 			$assistant_message = $body['choices'][0]['message'];
 
 			// If it was a start message, don't add user message to conversation
-			if ($user_message !== 'start') {
-				$conversation[] = [
-					'role' => 'user',
-					'content' => $user_message
-				];
+			if ( $user_message !== 'start' ) {
+				$conversation[] = array(
+					'role'    => 'user',
+					'content' => $user_message,
+				);
 			}
 
 			// Add assistant's response to conversation
 			$conversation[] = $assistant_message;
 
-			wp_send_json_success([
-				'message' => $assistant_message['content'],
-				'conversation' => $conversation
-			]);
+			wp_send_json_success(
+				array(
+					'message'      => $assistant_message['content'],
+					'conversation' => $conversation,
+				)
+			);
 
-		} catch (Exception $e) {
-			self::debug_log('Unexpected error', [
-				'message' => $e->getMessage(),
-				'trace' => $e->getTraceAsString()
-			]);
-			wp_send_json_error([
-				'message' => __('An unexpected error occurred.', 'wp-ikigai'),
-				'details' => $e->getMessage()
-			], 500);
+		} catch ( Exception $e ) {
+			self::debug_log(
+				'Unexpected error',
+				array(
+					'message' => $e->getMessage(),
+					'trace'   => $e->getTraceAsString(),
+				)
+			);
+			wp_send_json_error(
+				array(
+					'message' => __( 'An unexpected error occurred.', 'wp-ikigai' ),
+					'details' => $e->getMessage(),
+				),
+				500
+			);
 		}
 	}
 }

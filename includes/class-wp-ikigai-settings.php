@@ -193,11 +193,11 @@ class WP_Ikigai_Settings {
 		$api_key = get_option( 'wp_ikigai_openai_key' );
 		?>
 		<input type="password"
-			   id="wp_ikigai_openai_key"
-			   name="wp_ikigai_openai_key"
-			   value="<?php echo esc_attr( $api_key ); ?>"
-			   class="regular-text"
-			   autocomplete="new-password">
+				id="wp_ikigai_openai_key"
+				name="wp_ikigai_openai_key"
+				value="<?php echo esc_attr( $api_key ); ?>"
+				class="regular-text"
+				autocomplete="new-password">
 		<p class="description">
 			<?php echo esc_html__( 'Enter your OpenAI API key. You can get one from', 'wp-ikigai' ); ?>
 			<a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI Website</a>
@@ -211,13 +211,13 @@ class WP_Ikigai_Settings {
 	 * @return void
 	 */
 	public function render_model_field() {
-		$model = get_option( 'wp_ikigai_model', 'gpt-4o-mini' );
+		$model  = get_option( 'wp_ikigai_model', 'gpt-4o-mini' );
 		$models = array(
-			'gpt-4o-mini' => __( 'GPT-4o Mini (Default)', 'wp-ikigai' ),
-			'gpt-4o'     => __( 'GPT-4o', 'wp-ikigai' ),
-			'gpt-4'      => __( 'GPT-4', 'wp-ikigai' ),
+			'gpt-4o-mini'         => __( 'GPT-4o Mini (Default)', 'wp-ikigai' ),
+			'gpt-4o'              => __( 'GPT-4o', 'wp-ikigai' ),
+			'gpt-4'               => __( 'GPT-4', 'wp-ikigai' ),
 			'gpt-4-turbo-preview' => __( 'GPT-4 Turbo', 'wp-ikigai' ),
-			'gpt-3.5-turbo' => __( 'GPT-3.5 Turbo', 'wp-ikigai' ),
+			'gpt-3.5-turbo'       => __( 'GPT-3.5 Turbo', 'wp-ikigai' ),
 		);
 		?>
 		<select id="wp_ikigai_model" name="wp_ikigai_model">
@@ -240,7 +240,7 @@ class WP_Ikigai_Settings {
 	 */
 	public function render_system_prompt_field() {
 		$default_prompt = $this->get_default_prompt();
-		$value = get_option( 'wp_ikigai_system_prompt' );
+		$value          = get_option( 'wp_ikigai_system_prompt' );
 		if ( empty( $value ) ) {
 			$value = $default_prompt;
 			update_option( 'wp_ikigai_system_prompt', $value );
@@ -342,7 +342,7 @@ class WP_Ikigai_Settings {
 		wp_redirect(
 			add_query_arg(
 				array(
-					'page' => $this->page_slug,
+					'page'             => $this->page_slug,
 					'settings-updated' => 'reset',
 				),
 				admin_url( 'options-general.php' )
