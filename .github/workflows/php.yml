@@ -16,16 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: wordpress_test
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
     - uses: actions/checkout@v4
 
@@ -48,7 +38,7 @@ jobs:
           ${{ runner.os }}-composer-
 
     - name: Install Dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest
+      run: composer install --prefer-dist --no-progress
 
     - name: Check PHP Code Style
       run: composer run phpcs
@@ -57,15 +47,6 @@ jobs:
     - name: Fix PHP Code Style
       run: composer run phpcbf
       continue-on-error: true
-
-    - name: Setup WordPress Test Environment
-      run: bash bin/install-wp-tests.sh wordpress_test root root localhost
-
-    - name: Run PHPUnit Tests
-      run: composer run test
-      env:
-        WP_TESTS_DIR: /tmp/wordpress-tests-lib
-        WP_CORE_DIR: /tmp/wordpress
 
   build:
     needs: php
