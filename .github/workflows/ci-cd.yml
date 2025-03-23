@@ -67,31 +67,35 @@ jobs:
     needs: php
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-
     - name: Setup PHP for build
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
         tools: composer:v2
-
     - name: Install Production Dependencies
       run: composer install --no-dev --prefer-dist --no-progress --optimize-autoloader
-
+    - name: Get Plugin Version
+      id: get_version
+      run: echo "VERSION=$(grep -i 'Version:' wp_ikigai.php | awk -F' ' '{print $3}' | tr -d '\r\n')" >> $GITHUB_OUTPUT
     - name: Create Release ZIP
       run: |
         mkdir -p build
         rsync -av --exclude-from=.distignore . build/
         cd build
-        zip -r ../wp-ikigai.zip .
-
+        zip -r ../wp-ikigai-${{ steps.get_version.outputs.VERSION }}.zip .
     - name: Upload ZIP as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: plugin-build
-        path: wp-ikigai.zip
+        path: wp-ikigai-${{ steps.get_version.outputs.VERSION }}.zip
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: wp-ikigai-${{ steps.get_version.outputs.VERSION }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # Deploy-Job auskommentiert, da SVN-Deployment noch nicht eingerichtet ist
 #  deploy:
