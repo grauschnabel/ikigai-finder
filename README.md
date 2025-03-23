@@ -1,4 +1,4 @@
-# WP Ikigai Finder
+# Ikigai Finder
 
 A WordPress plugin that provides an AI-powered Ikigai finder to guide users through their personal Ikigai discovery process.
 
@@ -6,7 +6,7 @@ Version: 0.1.7
 
 ## Description
 
-WP Ikigai Finder is an innovative WordPress plugin that uses artificial intelligence (OpenAI GPT) to help users discover their personal Ikigai. Ikigai is a Japanese concept that describes the "reason for being" or "joy of life" - the sweet spot where passion, mission, profession, and vocation intersect.
+Ikigai Finder is an innovative WordPress plugin that uses artificial intelligence (OpenAI GPT) to help users discover their personal Ikigai. Ikigai is a Japanese concept that describes the "reason for being" or "joy of life" - the sweet spot where passion, mission, profession, and vocation intersect.
 
 ### Key Features
 
@@ -28,7 +28,7 @@ WP Ikigai Finder is an innovative WordPress plugin that uses artificial intellig
 
 ## Configuration
 
-1. Navigate to "Settings > WP Ikigai"
+1. Navigate to "Settings > Ikigai Finder"
 2. Enter your OpenAI API key
 3. Select your preferred GPT model
 4. Adjust other parameters if needed
@@ -36,7 +36,7 @@ WP Ikigai Finder is an innovative WordPress plugin that uses artificial intellig
 
 ## Usage
 
-1. Add the "WP Ikigai Finder" block to any page or post
+1. Add the "Ikigai Finder" block to any page or post
 2. Publish the page
 3. The chat interface will appear automatically
 
@@ -60,7 +60,7 @@ For optimal results, users should:
 
 ```bash
 # Clone repository
-git clone https://github.com/grauschnabel/wp-ikigai.git
+git clone https://github.com/grauschnabel/ikigai-finder.git
 
 # Install dependencies
 npm install
@@ -89,11 +89,14 @@ GitHub: [@grauschnabel](https://github.com/grauschnabel)
 ## Changelog
 
 ### 0.1.7
-- Fixed plugin installation issues
-- Updated tested up to WordPress 6.7
-- Optimized readme.txt for WordPress plugin directory
-- Fixed text domain configuration
-- Improved CI/CD pipeline with proper JavaScript build process
+- Renamed plugin from WP Ikigai to Ikigai Finder
+- Updated all file names and references
+- Translated coding standards to English
+- Removed unnecessary scripts
+- Updated GitHub Actions workflow
+- Updated composer and package configurations
+- Reorganized test files
+- Updated translation files
 
 ### 0.1.6
 - Fixed chat initialization bug where the user had to send first message
