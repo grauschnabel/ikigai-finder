@@ -2,56 +2,29 @@
 /vendor/
 composer.lock
 
-# Node
+# Node.js
 /node_modules/
 package-lock.json
-
-# Build
-/build/
-/dist/
-
-# IDE
-.idea/
-.vscode/
-*.sublime-project
-*.sublime-workspace
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment
-.env
-.env.*
-!.env.example
+# Build
+/build/
+/dist/
+*.zip
 
-# WordPress Plugin specific
-wp-ikigai.zip
-
-# Temporary files
-*.tmp
-*.temp
-*.bak
+# IDE & Editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
 *.swp
-*~
+*.swo
 
-# Docker Compose
-docker-compose.yml
-# Composer
-/vendor/
-composer.lock
-
-# Node.js
-/node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
+# OS
+.DS_Store
+Thumbs.db
 
 # WordPress
 wp-config.php
@@ -64,19 +37,20 @@ wp-content/upgrade/
 wp-content/uploads/
 wp-content/wp-cache-config.php
 
-# PHPUnit
+# Testing
 .phpunit.result.cache
 /coverage-report/
 
-# IDE & Editors
-.idea/
-.vscode/
-*.swp
-*.swo
-.DS_Store
-Thumbs.db
+# Environment
+.env
+.env.*
+!.env.example
 
-# Build Dateien
-/build/
-/dist/
-*.zip
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*~
