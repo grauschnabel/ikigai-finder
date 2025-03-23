@@ -54,7 +54,7 @@ For optimal results, users should:
 
 - Node.js and npm
 - WordPress 6.7.0, 6.7.1, or 6.7.2
-- PHP 8.2
+- PHP 8.1
 
 ### Developer Setup
 

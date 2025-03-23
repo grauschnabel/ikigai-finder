@@ -2,9 +2,9 @@ const { registerBlockType } = wp.blocks;
 const { __ }                = wp.i18n;
 
 registerBlockType(
-	'wp-ikigai/chat-block',
+	'ikigai-finder/chat-block',
 	{
-		title: __( 'Ikigai Chat', 'wp-ikigai' ),
+		title: __( 'Ikigai Chat', 'ikigai-finder' ),
 		icon: 'format-chat',
 		category: 'widgets',
 		attributes: {},

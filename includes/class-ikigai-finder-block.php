@@ -208,6 +208,9 @@ class Ikigai_Finder_Block {
 				return;
 			}
 
+			// Get GPT model from settings
+			$gpt_model = get_option( 'ikigai_finder_model', 'gpt-4' );
+
 			// Check system prompt.
 			$system_prompt = get_option( 'ikigai_finder_system_prompt' );
 			if ( empty( $system_prompt ) ) {
@@ -282,10 +285,11 @@ class Ikigai_Finder_Block {
 					),
 					'body'    => wp_json_encode(
 						array(
-							'model'    => 'gpt-4',
+							'model'    => $gpt_model,
 							'messages' => $messages,
 						)
 					),
+					'timeout' => 60,
 				)
 			);
 
