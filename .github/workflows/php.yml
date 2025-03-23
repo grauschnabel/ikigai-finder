@@ -75,7 +75,7 @@ jobs:
         zip -r ../wp-ikigai.zip .
 
     - name: Upload ZIP as artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: plugin-build
         path: wp-ikigai.zip
