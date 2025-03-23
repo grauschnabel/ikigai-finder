@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress Plugin Coding Standard">
+    <description>WordPress Plugin Coding Standard</description>
+
+    <!-- Include WordPress Coding Standards -->
+    <rule ref="WordPress"/>
+
+    <!-- Exclude vendor directory -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <!-- Check all PHP files in the project -->
+    <file>.</file>
+</ruleset> 
