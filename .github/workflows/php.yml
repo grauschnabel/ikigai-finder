@@ -50,7 +50,10 @@ jobs:
 
     - name: Setup WordPress Test Environment
       run: |
+        mkdir -p /tmp/wordpress
         mkdir -p /tmp/wordpress-tests-lib
+        curl -O https://wordpress.org/wordpress-6.7.2.tar.gz
+        tar --strip-components=1 -zxmf wordpress-6.7.2.tar.gz -C /tmp/wordpress/
         git clone --depth=1 --branch=6.7.2 https://github.com/WordPress/wordpress-develop.git /tmp/wordpress-develop
         cp -r /tmp/wordpress-develop/tests/phpunit/includes/* /tmp/wordpress-tests-lib/
         cp -r /tmp/wordpress-develop/tests/phpunit/data/* /tmp/wordpress-tests-lib/
