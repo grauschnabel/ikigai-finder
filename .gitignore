@@ -37,6 +37,9 @@ wp-ikigai.zip
 # Temporary files
 *.tmp
 *.temp
+*.bak
+*.swp
+*~
 
 # Docker Compose
 docker-compose.yml
@@ -52,7 +55,14 @@ package-lock.json
 
 # WordPress
 wp-config.php
-/wp-content/
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/uploads/
+wp-content/wp-cache-config.php
 
 # PHPUnit
 .phpunit.result.cache

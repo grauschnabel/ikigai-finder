@@ -11,13 +11,14 @@
 	<exclude-pattern>/assets/*</exclude-pattern>
 	<exclude-pattern>/tests/*</exclude-pattern>
 	<exclude-pattern>/build/*</exclude-pattern>
+	<exclude-pattern>/languages/*</exclude-pattern>
 
 	<!-- Verwende WordPress als Basis -->
 	<rule ref="WordPress">
-		<!-- Du kannst spezifische Regeln deaktivieren -->
-		<!--
+		<!-- Spezifische Regeln deaktivieren -->
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
-		-->
+		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
+		<exclude name="WordPress.WP.I18n.TextDomainMismatch" />
 	</rule>
 
 	<!-- Überprüfe PHP-Kompatibilität -->
@@ -65,5 +66,35 @@
 		<properties>
 			<property name="absoluteNestingLevel" value="5"/>
 		</properties>
+	</rule>
+
+	<!-- Zusätzliche Regeln für bessere Code-Qualität -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="wp-ikigai"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Sicherheitsregeln -->
+	<rule ref="WordPress.Security">
+		<exclude name="WordPress.Security.NonceVerification.Missing" />
+		<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
+	</rule>
+
+	<!-- Dokumentationsregeln -->
+	<rule ref="WordPress.Docs">
+		<exclude name="WordPress.Docs.RequireHookDocumentation" />
+	</rule>
+
+	<!-- Performance-Regeln -->
+	<rule ref="WordPress.Performance">
+		<exclude name="WordPress.Performance.SlowDBQuery" />
+	</rule>
+
+	<!-- Debug-Regeln -->
+	<rule ref="WordPress.PHP.DevelopmentFunctions">
+		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log" />
 	</rule>
 </ruleset>
