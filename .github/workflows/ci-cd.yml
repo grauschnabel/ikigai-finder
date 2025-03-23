@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['7.4', '8.0', '8.1', '8.2']
-        wordpress-versions: ['latest']
+        php: [8.1, 8.2]
+        wordpress: [latest]
     
     steps:
     - uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php-versions }}
+        php-version: ${{ matrix.php }}
         extensions: mbstring, intl, json, mysql, zip
         tools: composer:v2, phpunit, wp-cli
         coverage: xdebug
@@ -45,7 +45,7 @@ jobs:
 
     - name: Setup WordPress Test Environment
       run: |
-        bash bin/install-wp-tests.sh wordpress_test root '' localhost ${{ matrix.wordpress-versions }}
+        bash bin/install-wp-tests.sh wordpress_test root '' localhost ${{ matrix.wordpress }}
         
     - name: Run PHPUnit Tests
       run: composer run test
