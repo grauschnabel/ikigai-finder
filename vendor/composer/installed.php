@@ -3,7 +3,7 @@
         'name' => 'grauschnabel/wp-ikigai',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0e7c6e74939b53d9446580d4f6aa90dab34e6e3a',
+        'reference' => '5565c1e22c6ebc2d28ba2939fb216f95bd2b1258',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'grauschnabel/wp-ikigai' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0e7c6e74939b53d9446580d4f6aa90dab34e6e3a',
+            'reference' => '5565c1e22c6ebc2d28ba2939fb216f95bd2b1258',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
