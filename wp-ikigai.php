@@ -50,17 +50,22 @@ require_once WP_IKIGAI_PLUGIN_DIR . 'includes/class-wp-ikigai-settings.php';
  */
 function wp_ikigai_init() {
 	// Debug information.
-	error_log( 'WP Ikigai: Current locale: ' . get_locale() );
-	error_log( 'WP Ikigai: Plugin path: ' . plugin_dir_path( __FILE__ ) );
-	error_log( 'WP Ikigai: Language path: ' . dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( 'WP Ikigai: Current locale: ' . get_locale() );
+		error_log( 'WP Ikigai: Plugin path: ' . plugin_dir_path( __FILE__ ) );
+		error_log( 'WP Ikigai: Language path: ' . dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
 
 	// Load text domain for translations.
 	$loaded = load_plugin_textdomain( 'wp-ikigai', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-	error_log( 'WP Ikigai: Textdomain loaded: ' . ( $loaded ? 'yes' : 'no' ) );
 
-	// Test translation.
-	$test_string = __( 'WP Ikigai Settings', 'wp-ikigai' );
-	error_log( 'WP Ikigai: Test translation: ' . $test_string );
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		error_log( 'WP Ikigai: Textdomain loaded: ' . ( $loaded ? 'yes' : 'no' ) );
+
+		// Test translation.
+		$test_string = __( 'WP Ikigai Settings', 'wp-ikigai' );
+		error_log( 'WP Ikigai: Test translation: ' . $test_string );
+	}
 
 	WP_Ikigai_Block::init();
 	WP_Ikigai_Settings::init();
@@ -75,7 +80,7 @@ add_action( 'plugins_loaded', 'wp_ikigai_init' );
  * @return string Modified MO file path.
  */
 function wp_ikigai_load_textdomain_mofile( $mofile, $domain ) {
-	if ( 'wp-ikigai' === $domain ) {
+	if ( 'wp-ikigai' === $domain && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 		error_log( 'WP Ikigai: Trying to load MO file: ' . $mofile );
 		error_log( 'WP Ikigai: File exists: ' . ( file_exists( $mofile ) ? 'yes' : 'no' ) );
 		error_log( 'WP Ikigai: File readable: ' . ( is_readable( $mofile ) ? 'yes' : 'no' ) );

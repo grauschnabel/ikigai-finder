@@ -43,7 +43,9 @@ class WP_Ikigai_Block {
 
 		wp_register_style(
 			'wp-ikigai-block-editor-style',
-			plugins_url( 'css/editor.css', __DIR__ )
+			plugins_url( 'css/editor.css', __DIR__ ),
+			array(),
+			WP_IKIGAI_VERSION
 		);
 
 		wp_register_style(
@@ -81,9 +83,9 @@ class WP_Ikigai_Block {
 			// Marked.js for Markdown parsing.
 			wp_enqueue_script(
 				'marked',
-				'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
+				plugins_url( 'js/marked.min.js', __DIR__ ),
 				array(),
-				'9.0.0',
+				WP_IKIGAI_VERSION,
 				true
 			);
 
@@ -166,11 +168,14 @@ class WP_Ikigai_Block {
 	 * @return void
 	 */
 	private static function debug_log( $message, $data = null ) {
-		$log_message = '[' . date( 'Y-m-d H:i:s' ) . '] ' . $message;
-		if ( null !== $data ) {
-			$log_message .= "\nData: " . print_r( $data, true );
+		$log_message = '[' . gmdate( 'Y-m-d H:i:s' ) . '] ' . $message;
+		if ( null !== $data && defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			$log_message .= "\nData: " . wp_json_encode( $data );
 		}
-		error_log( $log_message . "\n----------------------------------------\n" );
+
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+			error_log( $log_message . "\n----------------------------------------\n" );
+		}
 	}
 
 	/**
@@ -204,13 +209,13 @@ class WP_Ikigai_Block {
 			}
 
 			// Check and process conversation.
-			$conversation = isset( $_POST['conversation'] ) ? json_decode( stripslashes( $_POST['conversation'] ), true ) : array();
+			$conversation = isset( $_POST['conversation'] ) ? json_decode( wp_unslash( $_POST['conversation'] ), true ) : array();
 			if ( JSON_ERROR_NONE !== json_last_error() ) {
 				self::debug_log(
 					'JSON decode error',
 					array(
 						'error'    => json_last_error_msg(),
-						'raw_data' => $_POST['conversation'],
+						'raw_data' => isset( $_POST['conversation'] ) ? wp_unslash( $_POST['conversation'] ) : '',
 					)
 				);
 				wp_send_json_error( array( 'message' => __( 'Error processing conversation: ', 'wp-ikigai' ) . json_last_error_msg() ), 400 );
@@ -226,7 +231,7 @@ class WP_Ikigai_Block {
 			);
 
 			// Process user message.
-			$user_message = sanitize_text_field( $_POST['message'] );
+			$user_message = isset( $_POST['message'] ) ? sanitize_text_field( wp_unslash( $_POST['message'] ) ) : '';
 
 			// Extract current phase from message if present.
 			$current_phase = 1;

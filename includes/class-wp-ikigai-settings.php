@@ -59,12 +59,11 @@ class WP_Ikigai_Settings {
 	 * @return void
 	 */
 	public function add_settings_page() {
-		add_submenu_page(
-			'options-general.php',
+		add_options_page(
 			__( 'WP Ikigai Settings', 'wp-ikigai' ),
 			__( 'WP Ikigai', 'wp-ikigai' ),
 			'manage_options',
-			$this->page_slug,
+			'wp_ikigai',
 			array( $this, 'render_settings_page' )
 		);
 	}
@@ -75,9 +74,33 @@ class WP_Ikigai_Settings {
 	 * @return void
 	 */
 	public function register_settings() {
-		register_setting( 'wp_ikigai', 'wp_ikigai_openai_key' );
-		register_setting( 'wp_ikigai', 'wp_ikigai_model' );
-		register_setting( 'wp_ikigai', 'wp_ikigai_system_prompt' );
+		register_setting(
+			'wp_ikigai',
+			'wp_ikigai_openai_key',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => '',
+			)
+		);
+		register_setting(
+			'wp_ikigai',
+			'wp_ikigai_model',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+				'default'           => 'gpt-4',
+			)
+		);
+		register_setting(
+			'wp_ikigai',
+			'wp_ikigai_system_prompt',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_textarea_field',
+				'default'           => $this->get_default_prompt(),
+			)
+		);
 		register_setting(
 			'wp_ikigai',
 			'wp_ikigai_temperature',
@@ -176,12 +199,12 @@ class WP_Ikigai_Settings {
 	}
 
 	/**
-	 * Render the settings section description.
+	 * Section callback.
 	 *
 	 * @return void
 	 */
 	public function section_callback() {
-		echo '<p>' . esc_html__( 'Configure your OpenAI API settings for the Ikigai coach here.', 'wp-ikigai' ) . '</p>';
+		echo '<p>' . esc_html__( 'Configure your OpenAI API key and settings for the Ikigai chat bot.', 'wp-ikigai' ) . '</p>';
 	}
 
 	/**
@@ -190,46 +213,48 @@ class WP_Ikigai_Settings {
 	 * @return void
 	 */
 	public function render_api_key_field() {
-		$api_key = get_option( 'wp_ikigai_openai_key' );
+		$value = get_option( 'wp_ikigai_openai_key' );
 		?>
-		<input type="password"
-				id="wp_ikigai_openai_key"
-				name="wp_ikigai_openai_key"
-				value="<?php echo esc_attr( $api_key ); ?>"
-				class="regular-text"
-				autocomplete="new-password">
+		<input type="password" id="wp_ikigai_openai_key" name="wp_ikigai_openai_key" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
 		<p class="description">
-			<?php echo esc_html__( 'Enter your OpenAI API key. You can get one from', 'wp-ikigai' ); ?>
-			<a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI Website</a>
+			<?php
+			echo wp_kses(
+				__( 'Enter your <a href="https://platform.openai.com/account/api-keys" target="_blank">OpenAI API key</a>. This is required for the plugin to function.', 'wp-ikigai' ),
+				array(
+					'a' => array(
+						'href'   => array(),
+						'target' => array(),
+					),
+				)
+			);
+			?>
 		</p>
 		<?php
 	}
 
 	/**
-	 * Render the model selection field.
+	 * Render the model field.
 	 *
 	 * @return void
 	 */
 	public function render_model_field() {
-		$model  = get_option( 'wp_ikigai_model', 'gpt-4o-mini' );
 		$models = array(
-			'gpt-4o-mini'         => __( 'GPT-4o Mini (Default)', 'wp-ikigai' ),
-			'gpt-4o'              => __( 'GPT-4o', 'wp-ikigai' ),
-			'gpt-4'               => __( 'GPT-4', 'wp-ikigai' ),
-			'gpt-4-turbo-preview' => __( 'GPT-4 Turbo', 'wp-ikigai' ),
-			'gpt-3.5-turbo'       => __( 'GPT-3.5 Turbo', 'wp-ikigai' ),
+			'gpt-4'              => 'GPT-4',
+			'gpt-4-turbo'        => 'GPT-4 Turbo',
+			'gpt-3.5-turbo'      => 'GPT-3.5 Turbo',
+			'gpt-3.5-turbo-16k'  => 'GPT-3.5 Turbo (16k context)',
 		);
+
+		$current = get_option( 'wp_ikigai_model', 'gpt-4' );
 		?>
 		<select id="wp_ikigai_model" name="wp_ikigai_model">
-			<?php foreach ( $models as $value => $label ) : ?>
-				<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $model, $value ); ?>>
+			<?php foreach ( $models as $key => $label ) : ?>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $current, $key ); ?>>
 					<?php echo esc_html( $label ); ?>
 				</option>
 			<?php endforeach; ?>
 		</select>
-		<p class="description">
-			<?php echo esc_html__( 'Select the GPT model to use. GPT-4o Mini is optimized for Ikigai coaching.', 'wp-ikigai' ); ?>
-		</p>
+		<p class="description"><?php echo esc_html__( 'GPT-4 is recommended for best results.', 'wp-ikigai' ); ?></p>
 		<?php
 	}
 
@@ -361,12 +386,12 @@ class WP_Ikigai_Settings {
 			wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'wp-ikigai' ) );
 		}
 
-		$settings_updated = isset( $_GET['settings-updated'] ) ? sanitize_text_field( $_GET['settings-updated'] ) : '';
+		$settings_updated = isset( $_GET['settings-updated'] ) ? sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) : '';
 		?>
 		<div class="wrap">
 			<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
-			<?php if ( 'true' === $settings_updated ) : ?>
+			<?php if ( 'true' === $settings_updated && check_admin_referer( 'options-options' ) ) : ?>
 				<div class="notice notice-success is-dismissible">
 					<p><?php echo esc_html__( 'Settings saved.', 'wp-ikigai' ); ?></p>
 				</div>
