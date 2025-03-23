@@ -17,6 +17,25 @@ jobs:
   php:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      matrix:
+        php-versions: ['8.1', '8.2']
+        wp-versions: ['6.7.0', '6.7.1', '6.7.2']
+        include:
+          - php-versions: '8.1'
+            wp-versions: '6.7.0'
+          - php-versions: '8.1'
+            wp-versions: '6.7.1'
+          - php-versions: '8.1'
+            wp-versions: '6.7.2'
+          - php-versions: '8.2'
+            wp-versions: '6.7.0'
+          - php-versions: '8.2'
+            wp-versions: '6.7.1'
+          - php-versions: '8.2'
+            wp-versions: '6.7.2'
+
+    name: PHP ${{ matrix.php-versions }} / WP ${{ matrix.wp-versions }} Test
 
     steps:
     - uses: actions/checkout@v4
@@ -24,7 +43,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
+        php-version: ${{ matrix.php-versions }}
         tools: composer:v2, phpcs, phpunit
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pdo, pdo_mysql, session, tokenizer, zip
 
@@ -34,9 +53,9 @@ jobs:
         path: |
           vendor/
           ~/.composer/cache
-        key: ${{ runner.os }}-php-8.2-composer-${{ hashFiles('**/composer.lock') }}
+        key: ${{ runner.os }}-php-${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
-          ${{ runner.os }}-php-8.2-composer-
+          ${{ runner.os }}-php-${{ matrix.php-versions }}-composer-
           ${{ runner.os }}-composer-
 
     - name: Install Dependencies

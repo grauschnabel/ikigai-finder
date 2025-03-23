@@ -2,7 +2,7 @@
 
 A WordPress plugin that provides an AI-powered Ikigai finder to guide users through their personal Ikigai discovery process.
 
-Version: 0.1.4
+Version: 0.1.5
 
 ## Description
 
@@ -53,8 +53,8 @@ For optimal results, users should:
 ### Prerequisites
 
 - Node.js and npm
-- WordPress 6.0 or higher
-- PHP 7.4 or higher
+- WordPress 6.7.0, 6.7.1, or 6.7.2
+- PHP 8.1 or 8.2
 
 ### Developer Setup
 
@@ -82,11 +82,17 @@ GPL v2 or later
 
 ## Author
 
-Martin Kaffanke  
-Email: martin@kaffanke.info  
+Martin Kaffanke
+Email: martin@kaffanke.info
 GitHub: [@grauschnabel](https://github.com/grauschnabel)
 
 ## Changelog
+
+### 0.1.5
+- Added comprehensive test matrix for PHP 8.1/8.2 and WordPress 6.7.0/6.7.1/6.7.2
+- Improved CI/CD pipeline
+- Enhanced code quality checks
+- Updated dependencies
 
 ### 0.1.4
 - Complete German translation
@@ -109,4 +115,4 @@ GitHub: [@grauschnabel](https://github.com/grauschnabel)
 
 ### 0.1.1
 - Initial public release
-- Basic Ikigai finder functionality 
+- Basic Ikigai finder functionality
