@@ -83,16 +83,6 @@
 		<exclude name="WordPress.Security.ValidatedSanitizedInput.MissingUnslash" />
 	</rule>
 
-	<!-- Dokumentationsregeln -->
-	<rule ref="WordPress.Docs">
-		<exclude name="WordPress.Docs.RequireHookDocumentation" />
-	</rule>
-
-	<!-- Performance-Regeln -->
-	<rule ref="WordPress.Performance">
-		<exclude name="WordPress.Performance.SlowDBQuery" />
-	</rule>
-
 	<!-- Debug-Regeln -->
 	<rule ref="WordPress.PHP.DevelopmentFunctions">
 		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log" />
