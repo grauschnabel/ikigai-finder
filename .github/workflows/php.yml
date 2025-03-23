@@ -10,12 +10,6 @@ jobs:
   php:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    strategy:
-      matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
-        include:
-          - php: '8.2'
-            coverage: true
 
     steps:
     - uses: actions/checkout@v4
@@ -23,8 +17,8 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: ${{ matrix.php }}
-        coverage: ${{ matrix.coverage || false }}
+        php-version: '8.2'
+        coverage: xdebug
         tools: composer:v2
         extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pdo, pdo_mysql, session, tokenizer, zip
 
@@ -34,9 +28,9 @@ jobs:
         path: |
           vendor/
           ~/.composer/cache
-        key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+        key: ${{ runner.os }}-php-8.2-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
-          ${{ runner.os }}-php-${{ matrix.php }}-composer-
+          ${{ runner.os }}-php-8.2-composer-
           ${{ runner.os }}-composer-
 
     - name: Install Dependencies
@@ -52,7 +46,7 @@ jobs:
 
     - name: Setup WordPress Test Environment
       run: |
-        bash bin/install-wp-tests.sh wordpress_test root '' localhost latest
+        bash bin/install-wp-tests.sh wordpress_test root '' localhost 6.7.2
       env:
         WP_TESTS_DIR: /tmp/wordpress-tests-lib
         WP_CORE_DIR: /tmp/wordpress/
@@ -62,10 +56,8 @@ jobs:
       env:
         WP_TESTS_DIR: /tmp/wordpress-tests-lib
         WP_CORE_DIR: /tmp/wordpress/
-        PHP_VERSION: ${{ matrix.php }}
 
     - name: Upload Coverage Report
-      if: matrix.coverage
       uses: codecov/codecov-action@v3
       with:
         file: coverage-report/coverage.xml
@@ -84,10 +76,12 @@ jobs:
           This PR was automatically created to fix PHP code style issues.
           Please review the changes and merge if appropriate.
           
-          PHP Version: ${{ matrix.php }}
-        branch: fix/php-code-style-${{ matrix.php }}
+          Environment:
+          - PHP: 8.2
+          - WordPress: 6.7.2
+        branch: fix/php-code-style
         delete-branch: true
         labels: |
           automated
           code-style
-          php-${{ matrix.php }}
+          php-8.2
