@@ -29,4 +29,7 @@ Thumbs.db
 # Temporary files
 *.log
 *.tmp
-*.temp 
+*.temp
+
+# Docker Compose
+docker-compose.yml 
