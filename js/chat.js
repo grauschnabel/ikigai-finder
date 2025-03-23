@@ -11,7 +11,7 @@ document.addEventListener(
 	function () {
 		console.log( 'WP Ikigai: DOMContentLoaded event triggered' );
 
-		const chatContainer = document.getElementById( 'ikigai-chat-container' );
+		const chatContainer = document.getElementById( 'wp-ikigai-chat' );
 		if ( ! chatContainer) {
 			console.error( 'WP Ikigai: Chat container not found' );
 			return;
@@ -38,14 +38,14 @@ document.addEventListener(
 
 		// Get all necessary DOM elements
 		const messagesContainer = chatContainer.querySelector( '.wp-ikigai-chat-messages' );
-		const messageInput		= chatContainer.querySelector( '#ikigai-message-input' );
-		const sendButton		= chatContainer.querySelector( '#ikigai-send-button' );
-		const feedbackContainer = chatContainer.querySelector( '#ikigai-feedback-container' );
+		const messageInput		= chatContainer.querySelector( '#wp-ikigai-message' );
+		const sendButton		= chatContainer.querySelector( '.wp-ikigai-send' );
+		const feedbackContainer = chatContainer.querySelector( '.wp-ikigai-feedback' );
 		const loadingIndicator	= chatContainer.querySelector( '.wp-ikigai-loading' );
 		const copyChat			= chatContainer.querySelector( '.wp-ikigai-copy-chat' );
 		const copyIkigai		= chatContainer.querySelector( '.wp-ikigai-copy-ikigai' );
 		const feedbackButtons	= chatContainer.querySelectorAll( '.wp-ikigai-feedback-btn' );
-		const resetButton       = document.getElementById( 'ikigai-reset-button' );
+		const resetButton       = document.getElementById( 'wp-ikigai-reset-button' );
 
 		// Check if all elements are present
 		if ( ! messagesContainer || ! messageInput || ! sendButton || ! feedbackContainer || ! loadingIndicator) {
@@ -60,8 +60,8 @@ document.addEventListener(
 
 		// Erstelle die Phasen-Anzeige
 		const phaseIndicator     = document.createElement( 'div' );
-		phaseIndicator.id        = 'ikigai-phase-indicator';
-		phaseIndicator.className = 'ikigai-phase-indicator';
+		phaseIndicator.id        = 'wp-ikigai-phase-indicator';
+		phaseIndicator.className = 'wp-ikigai-phase-indicator';
 
 		// Füge den Fortschrittsbalken hinzu.
 		const progressBar     = document.createElement( 'div' );
@@ -69,22 +69,22 @@ document.addEventListener(
 		phaseIndicator.appendChild( progressBar );
 
 		const phases = [
-		{ id: 1, text: 'What do you love?' },
-		{ id: 2, text: 'What are you good at?' },
-		{ id: 3, text: 'What does the world need?' },
-		{ id: 4, text: 'For what would people pay?' }
+		{ id: 1, text: 'Was liebst du?' },
+		{ id: 2, text: 'Was kannst du gut?' },
+		{ id: 3, text: 'Was braucht die Welt?' },
+		{ id: 4, text: 'Wofür würden Menschen zahlen?' }
 		];
 
 		// Füge die Phasen-Anzeige zum Container hinzu
 		phases.forEach(
 			phase => {
             const phaseElement	   = document.createElement( 'div' );
-            phaseElement.className = `phase - item phase - ${phase.id}`;
+            phaseElement.className = `phase-item phase-${phase.id}`;
             phaseElement.innerHTML = `
-					< div class        = "phase-circle" >
-						< span class = "phase-number" > ${phase.id} < / span >
-					< / div >
-					< span class = "phase-text" > ${phase.text} < / span >
+					<div class="phase-circle">
+						<span class="phase-number">${phase.id}</span>
+					</div>
+					<span class="phase-text">${phase.text}</span>
 				`;
             phaseIndicator.appendChild( phaseElement );
 			}
@@ -94,29 +94,37 @@ document.addEventListener(
 		chatContainer.insertBefore( phaseIndicator, feedbackContainer );
 
 		function updatePhaseIndicator(phase) {
-			const allPhases   = phaseIndicator.querySelectorAll( '.phase-item' );
-			const progressBar = phaseIndicator.querySelector( '.phase-progress' );
+			console.log('WP Ikigai: Aktualisiere Phasenindikator auf:', phase);
+
+			// Konvertiere Phase zu Nummer, falls es ein String ist
+			let numericPhase = phase;
+			if (typeof phase === 'string' && phase !== 'done') {
+				numericPhase = parseInt(phase);
+			}
+
+			const allPhases = phaseIndicator.querySelectorAll('.phase-item');
+			const progressBar = phaseIndicator.querySelector('.phase-progress');
 
 			allPhases.forEach(
 				(item, index) => {
-                item.classList.remove( 'active', 'completed' );
-                if (phase === 'done') {
-                    item.classList.add( 'completed' );
-                } else if (index < phase - 1) {
-                item.classList.add( 'completed' );
-                } else if (index === phase - 1) {
-						item.classList.add( 'active' );
-					}
+				item.classList.remove('active', 'completed');
+				if (numericPhase === 'done') {
+					item.classList.add('completed');
+				} else if (index < numericPhase - 1) {
+					item.classList.add('completed');
+				} else if (index === numericPhase - 1) {
+					item.classList.add('active');
+				}
 				}
 			);
 
 			// Berechne die Breite des Fortschrittsbalkens.
 			let progressWidth = '0';
-			if (phase === 'done') {
+			if (numericPhase === 'done') {
 				progressWidth = 'calc(100% - 120px)'; // Volle Breite minus Randabstand.
-			} else if (phase > 1 && phase <= 4) {
-				const progress = ((phase - 1) / 3) * 100;
-				progressWidth  = `calc( ${progress} % * ((100 % - 120px) / 100) )`;
+			} else if (numericPhase > 1 && numericPhase <= 4) {
+				const progress = ((numericPhase - 1) / 3) * 100;
+				progressWidth = `calc(${progress}% * ((100% - 120px) / 100))`;
 			}
 
 			// Setze den Fortschrittsbalken.
@@ -127,25 +135,65 @@ document.addEventListener(
 
 		function extractPhase(message) {
 			// Versuche, die Phase aus der Nachricht zu extrahieren.
-			const phaseMatch = message.match( /\[Phase: (\d+|done)\]/ );
+			// Prüfe beide möglichen Formate: [PHASE=n] und [CURRENT_PHASE=n]
+			let phaseMatch = message.match(/\[PHASE=(\d+|done)\]/);
+			if (!phaseMatch) {
+				phaseMatch = message.match(/\[CURRENT_PHASE=(\d+|done)\]/);
+			}
+
+			console.log('WP Ikigai: Extrahierte Phase:', phaseMatch ? phaseMatch[1] : 'keine');
 			return phaseMatch ? phaseMatch[1] : null;
 		}
 
 		function addMessage(message, isUser = false) {
-			console.log( 'WP Ikigai: Füge Nachricht hinzu:', { message, isUser } );
-			const messageElement = document.createElement( 'div' );
-			messageElement.classList.add( 'message', isUser ? 'user-message' : 'bot-message' );
+			console.log('WP Ikigai: Füge Nachricht hinzu:', { message, isUser });
+			const messageElement = document.createElement('div');
+			messageElement.classList.add('message', isUser ? 'user-message' : 'bot-message');
 
 			let cleanMessage = message;
 
-			if ( ! isUser) {
+			if (!isUser) {
 				// Extrahiere und aktualisiere die Phase
-				const newPhase = extractPhase( message );
+				const newPhase = extractPhase(message);
 				if (newPhase) {
-					currentPhase = newPhase;
-					updatePhaseIndicator( currentPhase );
+					currentPhase = newPhase === 'done' ? 'done' : parseInt(newPhase);
+					console.log('WP Ikigai: Aktualisiere auf Phase:', currentPhase);
+					updatePhaseIndicator(currentPhase);
 					// Entferne das Phase-Tag aus der Nachricht
-					cleanMessage = message.replace( /\[Phase: (\d+|done)\]/, '' ).trim();
+					cleanMessage = message.replace(/\[PHASE=(\d+|done)\]/, '').trim();
+					cleanMessage = cleanMessage.replace(/\[CURRENT_PHASE=(\d+|done)\]/, '').trim();
+				}
+
+				// Prüfe, ob ein Phasenwechsel im Text erwähnt wird
+				if (cleanMessage.includes('Phase 2') || cleanMessage.includes('nächsten Phase') ||
+				    cleanMessage.includes('zweiten Phase')) {
+					console.log('WP Ikigai: Phasenwechsel zu Phase 2 im Text erkannt');
+					if (currentPhase === 1 || currentPhase === '1') {
+						currentPhase = 2;
+						updatePhaseIndicator(currentPhase);
+					}
+				} else if (cleanMessage.includes('Phase 3') || cleanMessage.includes('dritten Phase') ||
+				    (cleanMessage.includes('nächsten Phase') && (currentPhase === 2 || currentPhase === '2'))) {
+					console.log('WP Ikigai: Phasenwechsel zu Phase 3 im Text erkannt');
+					if (currentPhase === 2 || currentPhase === '2') {
+						currentPhase = 3;
+						updatePhaseIndicator(currentPhase);
+					}
+				} else if (cleanMessage.includes('Phase 4') || cleanMessage.includes('vierten Phase') ||
+				    (cleanMessage.includes('nächsten Phase') && (currentPhase === 3 || currentPhase === '3')) ||
+				    cleanMessage.includes('letzten Phase')) {
+					console.log('WP Ikigai: Phasenwechsel zu Phase 4 im Text erkannt');
+					if (currentPhase === 3 || currentPhase === '3') {
+						currentPhase = 4;
+						updatePhaseIndicator(currentPhase);
+					}
+				} else if (cleanMessage.includes('abgeschlossen') && cleanMessage.includes('Ikigai') ||
+				    cleanMessage.includes('alle vier Bereiche') || cleanMessage.includes('alle Phasen')) {
+					console.log('WP Ikigai: Phasenwechsel zu "done" im Text erkannt');
+					if (currentPhase === 4 || currentPhase === '4') {
+						currentPhase = 'done';
+						updatePhaseIndicator(currentPhase);
+					}
 				}
 
 				// Prüfe, ob marked verfügbar ist
@@ -175,13 +223,17 @@ document.addEventListener(
 
 		function setLoading(loading) {
 			if (loading) {
-				// Füge eine Klasse zum messagesContainer hinzu, während der Bot antwortet.
-				messagesContainer.classList.add( 'loading' );
+				// Zeige den Loading-Indikator an
+				loadingIndicator.style.display = 'block';
+				messagesContainer.classList.add('loading');
 				sendButton.disabled = true;
+				messageInput.disabled = true;
 			} else {
-				// Entferne die Klasse, wenn die Antwort eingegangen ist.
-				messagesContainer.classList.remove( 'loading' );
+				// Verstecke den Loading-Indikator
+				loadingIndicator.style.display = 'none';
+				messagesContainer.classList.remove('loading');
 				sendButton.disabled = false;
+				messageInput.disabled = false;
 			}
 		}
 
@@ -192,22 +244,27 @@ document.addEventListener(
 
 			// Verhindere, dass leere Nachrichten gesendet werden.
 			const msg = message || messageInput.value.trim();
-			if ( ! msg) {
+			if ( ! msg && message !== 'start') {
 				return;
 			}
 
 			isProcessing = true;
 			setLoading( true );
 
+			// Füge die Benutzernachricht zuerst hinzu, es sei denn, es ist eine Start-Nachricht
+			if (msg && message !== 'start') {
+				addMessage( msg, true );
+			}
+
 			try {
 				// Sende die Nachricht an das Backend.
 				// Füge die aktuelle Phase zur Nachricht hinzu.
-				const messageWithPhase = `[CURRENT_PHASE = ${currentPhase}] ${msg}`;
+				const messageWithPhase = message === 'start' ? 'start' : `[CURRENT_PHASE=${currentPhase}] ${msg}`;
 
 				const formData = new URLSearchParams();
 				formData.append( 'action', 'wp_ikigai_chat' );
 				formData.append( 'message', messageWithPhase );
-				formData.append( 'conversation', conversation );
+				formData.append( 'conversation', JSON.stringify(conversation) );
 				formData.append( '_wpnonce', window.wpIkigai.nonce );
 
 				const response = await fetch(
@@ -224,16 +281,16 @@ document.addEventListener(
 				const data = await response.json();
 
 				if ( ! data.success) {
-					throw new Error( data.data ? .message || 'Unbekannter Fehler' );
+					throw new Error( data.data?.message || 'Unbekannter Fehler' );
 				}
 
 				// Verarbeite die Bot-Antwort
 				let botMessage = data.data.message;
 
-				if (msg) {
-					addMessage( msg, true );
-				}
+				// Füge die Bot-Antwort hinzu
 				addMessage( botMessage, false );
+
+				// Aktualisiere die Konversation
 				conversation = data.data.conversation;
 
 				messageInput.value = '';
@@ -274,7 +331,7 @@ document.addEventListener(
 		// Starte den Chat automatisch
 		setTimeout(
 			() => {
-				sendMessage();
+				sendMessage('start');
 			},
 			500
 		);

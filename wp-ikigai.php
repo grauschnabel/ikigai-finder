@@ -1,14 +1,16 @@
+<?php
+
 /**
  * Plugin Name: WP Ikigai Finder
  * Plugin URI: https://github.com/grauschnabel/wp-ikigai
- * Description: An AI-powered Ikigai discovery tool using ChatGPT
- * Version: 0.1.5
+ * Description: Ein WordPress-Plugin, das einen KI-gestützten Ikigai-Finder bereitstellt, um Benutzer durch ihren persönlichen Ikigai-Entdeckungsprozess zu führen.
  * Author: Martin Kaffanke
- * Author URI: https://github.com/grauschnabel
+ * Author URI: https://kaffanke.info
+ * Version: 0.1.6
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wp-ikigai
  * Domain Path: /languages
- * License: GPL v2 or later
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  *
  * @package WP_Ikigai
  */
@@ -22,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @var string
  */
-define( 'WP_IKIGAI_VERSION', '0.1.5' );
+define( 'WP_IKIGAI_VERSION', '0.1.6' );
 
 /**
  * Plugin directory path.

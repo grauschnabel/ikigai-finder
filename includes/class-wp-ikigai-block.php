@@ -241,13 +241,13 @@ class WP_Ikigai_Block {
 				// Add hint for phase 1.
 				$messages[] = array(
 					'role'    => 'system',
-					'content' => 'The chat now begins with phase 1. Please start with a friendly greeting and briefly explain that we will explore the Ikigai in four phases.',
+					'content' => 'Der Chat beginnt jetzt mit Phase 1. Bitte beginne mit einer freundlichen Begrüßung und erkläre kurz, dass wir das Ikigai in vier Phasen erkunden werden.',
 				);
 
 				// Add hint for current phase.
 				$messages[] = array(
 					'role'    => 'system',
-					'content' => "We are currently in phase {$current_phase}. Please keep this in mind during the conversation.",
+					'content' => "Wir befinden uns derzeit in Phase {$current_phase}. Bitte denke während des Gesprächs daran.",
 				);
 				$messages[] = array(
 					'role'    => 'user',
@@ -265,6 +265,14 @@ class WP_Ikigai_Block {
 				$messages[] = array(
 					'role'    => sanitize_text_field( $message['role'] ),
 					'content' => sanitize_textarea_field( $message['content'] ),
+				);
+			}
+
+			// Add current user message to messages for API (but not conversation yet)
+			if ( $user_message !== 'start' ) {
+				$messages[] = array(
+					'role'    => 'user',
+					'content' => $user_message,
 				);
 			}
 
@@ -354,6 +362,7 @@ class WP_Ikigai_Block {
 
 			// If it was a start message, don't add user message to conversation
 			if ( $user_message !== 'start' ) {
+				// Aktualisiere die Konversation mit der aktuellen Benutzernachricht
 				$conversation[] = array(
 					'role'    => 'user',
 					'content' => $user_message,
@@ -363,9 +372,52 @@ class WP_Ikigai_Block {
 			// Add assistant's response to conversation
 			$conversation[] = $assistant_message;
 
+			// Add phase tag to bot's response
+			$phase_tag = '';
+			if ($current_phase >= 1 && $current_phase <= 4) {
+				$phase_tag = "[PHASE={$current_phase}]";
+			}
+
+			self::debug_log("Current phase before text analysis: {$current_phase}");
+
+			// Prüfe nach Phasenwechsel-Schlüsselwörtern in der Antwort
+			$response_content = $assistant_message['content'];
+			if (strpos($response_content, 'Phase 2') !== false ||
+				strpos($response_content, 'nächsten Phase') !== false ||
+				strpos($response_content, 'zweiten Phase') !== false) {
+				if ($current_phase == 1) {
+					$current_phase = 2;
+					$phase_tag = "[PHASE=2]";
+				}
+			} elseif (strpos($response_content, 'Phase 3') !== false ||
+				strpos($response_content, 'dritten Phase') !== false ||
+				(strpos($response_content, 'nächsten Phase') !== false && $current_phase == 2)) {
+				if ($current_phase == 2) {
+					$current_phase = 3;
+					$phase_tag = "[PHASE=3]";
+				}
+			} elseif (strpos($response_content, 'Phase 4') !== false ||
+				strpos($response_content, 'vierten Phase') !== false ||
+				strpos($response_content, 'letzten Phase') !== false ||
+				(strpos($response_content, 'nächsten Phase') !== false && $current_phase == 3)) {
+				if ($current_phase == 3) {
+					$current_phase = 4;
+					$phase_tag = "[PHASE=4]";
+				}
+			} elseif ((strpos($response_content, 'abgeschlossen') !== false && strpos($response_content, 'Ikigai') !== false) ||
+				strpos($response_content, 'alle vier Bereiche') !== false ||
+				strpos($response_content, 'alle Phasen') !== false) {
+				if ($current_phase == 4) {
+					$current_phase = 'done';
+					$phase_tag = "[PHASE=done]";
+				}
+			}
+
+			self::debug_log("Final phase after text analysis: {$current_phase} with tag: {$phase_tag}");
+
 			wp_send_json_success(
 				array(
-					'message'      => $assistant_message['content'],
+					'message'      => $phase_tag . ' ' . $assistant_message['content'],
 					'conversation' => $conversation,
 				)
 			);

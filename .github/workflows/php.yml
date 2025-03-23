@@ -1,0 +1,122 @@
+name: WP_Ikigai CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        php-versions: ['8.2']
+        wp-versions: ['6.7.0', '6.7.1', '6.7.2']
+        include:
+          - php-versions: '8.2'
+            wp-versions: '6.7.0'
+          - php-versions: '8.2'
+            wp-versions: '6.7.1'
+          - php-versions: '8.2'
+            wp-versions: '6.7.2'
+
+    name: PHP ${{ matrix.php-versions }} / WP ${{ matrix.wp-versions }} Test
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        tools: composer:v2, phpcs, phpunit
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pdo, pdo_mysql, session, tokenizer, zip
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          vendor/
+          ~/.composer/cache
+        key: ${{ runner.os }}-php-${{ matrix.php-versions }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-${{ matrix.php-versions }}-composer-
+          ${{ runner.os }}-composer-
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Check PHP Code Style
+      run: composer run phpcs
+      continue-on-error: true
+
+    - name: Fix PHP Code Style
+      run: composer run phpcbf
+      continue-on-error: true
+
+  build:
+    needs: php
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup PHP for build
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        tools: composer:v2
+    - name: Install Production Dependencies
+      run: composer install --no-dev --prefer-dist --no-progress --optimize-autoloader
+    - name: Get Plugin Version
+      id: get_version
+      run: echo "VERSION=$(grep -i 'Version:' wp_ikigai.php | awk -F' ' '{print $3}' | tr -d '\r\n')" >> $GITHUB_OUTPUT
+    - name: Create Release ZIP
+      run: |
+        mkdir -p build
+        rsync -av --exclude-from=.distignore . build/
+        cd build
+        zip -r ../wp-ikigai-${{ steps.get_version.outputs.VERSION }}.zip .
+    - name: Upload ZIP as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        path: wp-ikigai-${{ steps.get_version.outputs.VERSION }}.zip
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: wp-ikigai-${{ steps.get_version.outputs.VERSION }}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Deploy-Job auskommentiert, da SVN-Deployment noch nicht eingerichtet ist
+#  deploy:
+#    needs: build
+#    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - name: Checkout code
+#      uses: actions/checkout@v4
+#
+#    - name: Download build
+#      uses: actions/download-artifact@v4
+#      with:
+#        name: plugin-build
+#
+#    - name: WordPress.org Plugin Deploy
+#      uses: 10up/action-wordpress-plugin-deploy@stable
+#      env:
+#        SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+#        SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+#        SLUG: wp-ikigai

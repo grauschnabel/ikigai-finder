@@ -2,7 +2,7 @@
 
 A WordPress plugin that provides an AI-powered Ikigai finder to guide users through their personal Ikigai discovery process.
 
-Version: 0.1.5
+Version: 0.1.6
 
 ## Description
 
@@ -87,6 +87,14 @@ Email: martin@kaffanke.info
 GitHub: [@grauschnabel](https://github.com/grauschnabel)
 
 ## Changelog
+
+### 0.1.6
+- Fixed chat initialization bug where the user had to send first message
+- Fixed phase tracking issues in all four phases
+- Improved loading indicator visibility
+- Fixed conversation handling to ensure proper message ordering
+- Enhanced phase detection in chat messages
+- Fixed translation issues in system prompts
 
 ### 0.1.5
 - Added comprehensive test matrix for PHP 8.2 and WordPress 6.7.0/6.7.1/6.7.2

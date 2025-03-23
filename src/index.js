@@ -11,10 +11,10 @@ registerBlockType(
 
 		edit: function () {
 			return (
-			< div className = "wp-ikigai-chat-preview" >
-				< h3 > Ikigai Chat < / h3 >
-				< p > Dieser Block zeigt einen interaktiven Chat zur Ikigai - Findung an.< / p >
-			< / div >
+			<div className="wp-ikigai-chat-preview">
+				<h3>Ikigai Chat</h3>
+				<p>Dieser Block zeigt einen interaktiven Chat zur Ikigai-Findung an.</p>
+			</div>
 			);
 		},
 
