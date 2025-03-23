@@ -94,9 +94,15 @@ jobs:
           code-style
           php-8.2
 
-    # Nur auf main Branch: ZIP erstellen und als Artifact hochladen
+  build:
+    needs: php
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
     - name: Create Release ZIP
-      if: github.ref == 'refs/heads/main'
       run: |
         mkdir -p build
         rsync -av --exclude-from=.distignore . build/
@@ -104,7 +110,6 @@ jobs:
         zip -r ../wp-ikigai.zip .
 
     - name: Upload ZIP as artifact
-      if: github.ref == 'refs/heads/main'
       uses: actions/upload-artifact@v3
       with:
         name: plugin-build
