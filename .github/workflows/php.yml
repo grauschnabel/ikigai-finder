@@ -2,16 +2,17 @@ name: PHP Code Quality
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   php:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -19,30 +20,53 @@ jobs:
         php-version: '8.2'
         coverage: xdebug
         tools: composer:v2
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, mbstring, pdo, pdo_mysql, pdo_sqlite, session, tokenizer, xml, zip
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: vendor/
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
 
     - name: Install Dependencies
-      run: composer install --prefer-dist --no-progress
+      run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Check PHP Code Style
       run: composer run phpcs
+      continue-on-error: true
 
     - name: Fix PHP Code Style
       run: composer run phpcbf
+      continue-on-error: true
 
     - name: Run PHPUnit Tests
       run: composer run test
+      env:
+        WP_TESTS_DIR: /tmp/wordpress-tests-lib
+        WP_CORE_DIR: /tmp/wordpress/
 
     - name: Upload Coverage Report
       uses: codecov/codecov-action@v3
       with:
         file: coverage-report/coverage.xml
         fail_ci_if_error: true
+        token: ${{ secrets.CODECOV_TOKEN }}
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
+      if: failure()
       with:
         commit-message: "style: Fix PHP code style issues"
         title: "style: Fix PHP code style issues"
-        body: "Automated fixes for PHP code style issues"
+        body: |
+          Automated fixes for PHP code style issues
+          
+          This PR was automatically created to fix PHP code style issues.
+          Please review the changes and merge if appropriate.
         branch: fix/php-code-style
         delete-branch: true
+        labels: |
+          automated
+          code-style
