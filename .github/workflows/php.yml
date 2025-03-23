@@ -1,0 +1,70 @@
+name: WP_Ikigai CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        tools: composer:v2, phpcs, phpunit
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, pdo, pdo_mysql, session, tokenizer, zip
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          vendor/
+          ~/.composer/cache
+        key: ${{ runner.os }}-php-8.2-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-8.2-composer-
+          ${{ runner.os }}-composer-
+
+    - name: Install Dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Check PHP Code Style
+      run: composer run phpcs
+      continue-on-error: true
+
+    - name: Fix PHP Code Style
+      run: composer run phpcbf
+      continue-on-error: true
+
+  build:
+    needs: php
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Create Release ZIP
+      run: |
+        mkdir -p build
+        rsync -av --exclude-from=.distignore . build/
+        cd build
+        zip -r ../wp-ikigai.zip .
+
+    - name: Upload ZIP as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: plugin-build
+        path: wp-ikigai.zip

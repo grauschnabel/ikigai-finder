@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory suffix=".php">./includes</directory>
+      <directory suffix=".php">./admin</directory>
+      <directory suffix=".php">./public</directory>
+      <file>wp_ikigai.php</file>
+    </include>
+    <exclude>
+      <directory>./tests</directory>
+      <directory>./vendor</directory>
+      <directory>./node_modules</directory>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="WP_Ikigai">
+      <directory suffix="Test.php">./tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php"/>
+    <env name="WP_TESTS_DIR" value="vendor/wp-phpunit/wp-phpunit/"/>
+    <env name="WP_CORE_DIR" value="vendor/wordpress/wordpress/"/>
+  </php>
+</phpunit>

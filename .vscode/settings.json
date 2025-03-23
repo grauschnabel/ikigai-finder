@@ -1,0 +1,54 @@
+{
+    "phpcs.standard": "WordPress",
+    "phpcs.executablePath": "./vendor/bin/phpcs",
+    "phpcs.ignorePatterns": [
+        "*/vendor/*",
+        "*/node_modules/*"
+    ],
+    "phpcs.showWarnings": true,
+    "phpcs.showSources": true,
+    "phpcs.autoConfigSearch": true,
+    "phpcs.enable": true,
+    "php.validate.executablePath": "/usr/bin/php",
+    "php.suggest.basic": true,
+    "php.validate.enable": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.phpcs": "explicit",
+        "source.fixAll.eslint": "explicit"
+    },
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+        "editor.formatOnSave": true,
+        "editor.detectIndentation": false
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "EditorConfig.EditorConfig",
+        "editor.formatOnSave": true,
+        "editor.detectIndentation": false
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "EditorConfig.EditorConfig",
+        "editor.formatOnSave": true,
+        "editor.detectIndentation": false
+    },
+    "[css]": {
+        "editor.defaultFormatter": "EditorConfig.EditorConfig",
+        "editor.formatOnSave": true,
+        "editor.detectIndentation": false
+    },
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact"
+    ],
+    "eslint.workingDirectories": [
+        {
+            "directory": ".",
+            "changeProcessCWD": true
+        }
+    ],
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "editor.formatOnSaveMode": "file"
+}
