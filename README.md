@@ -1,8 +1,83 @@
-# Ikigai Finder
+# Ikigai Finder WordPress Plugin
 
-A WordPress plugin that provides an AI-powered Ikigai finder to guide users through their personal Ikigai discovery process.
+Ein WordPress-Plugin, das einen Chat-basierten Ikigai-Coaching-Prozess mit GPT-4 Integration anbietet.
 
-Version: 0.1.7
+## Features
+
+* Interaktiver Chat-basierter Coaching-Prozess
+* Integration mit OpenAI GPT-4 API
+* Gutenberg Block für einfache Integration
+* Mehrsprachig (Deutsch, Englisch)
+* Responsive Design
+* Fortschrittsanzeige für den Coaching-Prozess
+
+## Technische Anforderungen
+
+* WordPress 6.0 oder höher
+* PHP 7.4 oder höher
+* OpenAI API-Schlüssel
+
+## Installation
+
+1. Lade die Plugin-Datei `ikigai-finder.zip` herunter
+2. Gehe zu WordPress Admin > Plugins > Installieren
+3. Klicke auf "Plugin hochladen" und wähle die heruntergeladene ZIP-Datei aus
+4. Klicke auf "Jetzt installieren"
+5. Nach der Installation klicke auf "Plugin aktivieren"
+6. Gehe zu den Plugin-Einstellungen und konfiguriere deinen OpenAI API-Schlüssel
+
+## Changelog
+
+### 0.1.8
+* Verbesserte Übersetzungen: Alle Texte auf "du"-Form umgestellt
+* Optimierte Benutzerführung durch konsistente Ansprache
+* Verbesserte Fehlermeldungen und Benutzerhinweise
+
+### 0.1.7
+* Verbesserte Positionierung des Ladeindikators
+* Optimierte Phasenanzeige im Chat-Interface
+* Bugfixes für die Anzeige der Coaching-Phasen
+
+### 0.1.6
+* Entfernung der "Hilfreich/Nicht hilfreich" Buttons
+* Optimierte Benutzeroberfläche
+* Verbesserte Fehlerbehandlung
+
+### 0.1.5
+* Verbesserte Positionierung des Ladeindikators
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+### 0.1.4
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+### 0.1.3
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+### 0.1.2
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+### 0.1.1
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+### 0.1.0
+* Erste Version des Plugins
+* Grundlegende Chat-Funktionalität
+* Integration mit OpenAI GPT-4
+* Mehrsprachige Unterstützung (Deutsch, Englisch)
+* Gutenberg Block Integration
+
+## Lizenz
+
+Dieses Plugin ist unter der GPL v2 oder später lizenziert.
 
 ## Description
 
@@ -16,15 +91,6 @@ Ikigai Finder is an innovative WordPress plugin that uses artificial intelligenc
 - Responsive and user-friendly interface
 - Multiple GPT models to choose from
 - Available in English and German
-
-## Installation
-
-1. Download the plugin ZIP file
-2. Go to your WordPress dashboard "Plugins > Add New"
-3. Click "Upload Plugin"
-4. Select the downloaded ZIP file
-5. Click "Install Now"
-6. Activate the plugin
 
 ## Configuration
 
@@ -76,61 +142,8 @@ npm run build
 
 Contributions are welcome! Please read our contribution guidelines before creating a pull request.
 
-## License
-
-GPL v2 or later
-
 ## Author
 
 Martin Kaffanke
 Email: martin@kaffanke.info
 GitHub: [@grauschnabel](https://github.com/grauschnabel)
-
-## Changelog
-
-### 0.1.7
-- Renamed plugin from WP Ikigai to Ikigai Finder
-- Updated all file names and references
-- Translated coding standards to English
-- Removed unnecessary scripts
-- Updated GitHub Actions workflow
-- Updated composer and package configurations
-- Reorganized test files
-- Updated translation files
-
-### 0.1.6
-- Fixed chat initialization bug where the user had to send first message
-- Fixed phase tracking issues in all four phases
-- Improved loading indicator visibility
-- Fixed conversation handling to ensure proper message ordering
-- Enhanced phase detection in chat messages
-- Fixed translation issues in system prompts
-
-### 0.1.5
-- Added comprehensive test matrix for PHP 8.2 and WordPress 6.7.0/6.7.1/6.7.2
-- Improved CI/CD pipeline
-- Enhanced code quality checks
-- Updated dependencies
-
-### 0.1.4
-- Complete German translation
-- Improved block rendering and asset loading
-- Enhanced error handling and security
-- Fixed coding standards compliance
-- Optimized chat interface
-
-### 0.1.3
-- Enhanced UI with WordPress system colors
-- Optimized phase display
-- Automatic chat initiation
-- Improved system prompt handling
-- Added new GPT models
-- Added multilingual support (EN/DE)
-
-### 0.1.2
-- Improved error handling
-- Implemented system prompt as HEREDOC
-
-### 0.1.1
-- Initial public release
-- Basic Ikigai finder functionality

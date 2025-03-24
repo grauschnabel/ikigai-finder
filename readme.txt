@@ -1,91 +1,137 @@
 === Ikigai Finder ===
-Contributors: martinkaffanke
-Tags: ikigai, chatgpt, openai, ai, life purpose
-Requires at least: 5.6
-Tested up to: 6.7
-Stable tag: 0.1.7
+Contributors: martinm
+Tags: ikigai, coaching, gpt, openai, chat, gutenberg
+Requires at least: 6.0
+Tested up to: 6.4
 Requires PHP: 7.4
+Stable tag: 0.1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: ikigai-finder
-Domain Path: /languages
 
-A WordPress plugin that provides an AI-powered Ikigai Finder to guide users through their personal Ikigai discovery process.
+Ein WordPress-Plugin, das einen Chat-basierten Ikigai-Coaching-Prozess mit GPT-4 Integration anbietet.
 
 == Description ==
 
-The Ikigai Finder is a powerful WordPress plugin that uses OpenAI's GPT to help users discover their Ikigai - the Japanese concept for their life purpose.
+Der Ikigai Finder ist ein WordPress-Plugin, das einen interaktiven Coaching-Prozess basierend auf dem Ikigai-Konzept anbietet. Das Plugin nutzt die OpenAI GPT-4 API, um personalisierte Coaching-Gespräche zu führen und den Benutzer durch den Prozess der Ikigai-Entdeckung zu führen.
 
-The Ikigai Finder works with a structured, multi-stage approach that helps users explore the four key areas:
-* What you love (Passion)
-* What you are good at (Skills)
-* What the world needs (Mission)
-* What you can be paid for (Profession)
+= Features =
 
-= Key Features =
+* Interaktiver Chat-basierter Coaching-Prozess
+* Integration mit OpenAI GPT-4 API
+* Gutenberg Block für einfache Integration
+* Mehrsprachig (Deutsch, Englisch)
+* Responsive Design
+* Fortschrittsanzeige für den Coaching-Prozess
 
-* Intuitive chat-based assistant
-* Step-by-step Ikigai discovery process
-* Seamless integration with WordPress using Gutenberg block
-* Customizable system instructions and AI parameters
-* Responsive design that looks good on all devices
+= Technische Anforderungen =
 
-= Technical Requirements =
-
-* WordPress 5.6 or higher
-* PHP 7.4 or higher
-* OpenAI API key (GPT-4 recommended)
+* WordPress 6.0 oder höher
+* PHP 7.4 oder höher
+* OpenAI API-Schlüssel
 
 == Installation ==
 
-1. Upload the plugin directory to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to 'Settings > Ikigai Finder' to enter your OpenAI API key
-4. Add the Ikigai chat block to any page or post using the Gutenberg editor
+1. Lade die Plugin-Datei `ikigai-finder.zip` herunter
+2. Gehe zu WordPress Admin > Plugins > Installieren
+3. Klicke auf "Plugin hochladen" und wähle die heruntergeladene ZIP-Datei aus
+4. Klicke auf "Jetzt installieren"
+5. Nach der Installation klicke auf "Plugin aktivieren"
+6. Gehe zu den Plugin-Einstellungen und konfiguriere deinen OpenAI API-Schlüssel
 
 == Frequently Asked Questions ==
 
-= Do I need an OpenAI API key? =
+= Welche OpenAI API-Version wird unterstützt? =
 
-Yes, this plugin requires a valid OpenAI API key. You can obtain one from OpenAI (openai.com).
+Das Plugin unterstützt die GPT-4 API von OpenAI.
 
-= Is the plugin GDPR compliant? =
+= Wie erhalte ich einen OpenAI API-Schlüssel? =
 
-The plugin itself does not permanently store user responses. However, data is sent to the OpenAI API. Please review OpenAI's privacy policies and ensure you inform users accordingly.
+Besuche [https://platform.openai.com](https://platform.openai.com) und erstelle ein Konto, um einen API-Schlüssel zu erhalten.
 
-= Which GPT model should I use? =
+= Welche Sprachen werden unterstützt? =
 
-For best results, we recommend GPT-4. GPT-3.5-Turbo also works, but GPT-4 provides deeper guidance.
+Das Plugin unterstützt Deutsch und Englisch.
 
 == Screenshots ==
 
-1. The Ikigai chat block in action
-2. Settings page for API configuration
-3. Example of an Ikigai coaching session
+1. Chat-Interface des Ikigai Finders
+2. Einstellungsseite für API-Konfiguration
+3. Gutenberg Block Integration
 
 == Changelog ==
 
+= 0.1.8 =
+* Verbesserte Übersetzungen: Alle Texte auf "du"-Form umgestellt
+* Optimierte Benutzerführung durch konsistente Ansprache
+* Verbesserte Fehlermeldungen und Benutzerhinweise
+
 = 0.1.7 =
-* Fixed plugin installation issues
-* Updated tested up to WordPress 6.7
-* Optimized readme.txt for WordPress plugin directory
-* Fixed text domain configuration
-* Renamed plugin to comply with WordPress guidelines
+* Verbesserte Positionierung des Ladeindikators
+* Optimierte Phasenanzeige im Chat-Interface
+* Bugfixes für die Anzeige der Coaching-Phasen
 
 = 0.1.6 =
-* Performance improvements and bug fixes
+* Entfernung der "Hilfreich/Nicht hilfreich" Buttons
+* Optimierte Benutzeroberfläche
+* Verbesserte Fehlerbehandlung
 
 = 0.1.5 =
-* Improved multilingual support
-* Bug fixes
+* Verbesserte Positionierung des Ladeindikators
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+= 0.1.4 =
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+= 0.1.3 =
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+= 0.1.2 =
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
+
+= 0.1.1 =
+* Verbesserte Fehlerbehandlung bei API-Anfragen
+* Optimierte Benutzerführung
+* Bugfixes für die Chat-Interface
 
 = 0.1.0 =
-* Initial public release
+* Erste Version des Plugins
+* Grundlegende Chat-Funktionalität
+* Integration mit OpenAI GPT-4
+* Mehrsprachige Unterstützung (Deutsch, Englisch)
+* Gutenberg Block Integration
 
 == Upgrade Notice ==
 
+= 0.1.8 =
+Verbesserte Übersetzungen und optimierte Benutzerführung durch konsistente "du"-Form in allen Texten.
+
 = 0.1.7 =
-This version fixes installation issues, updates compatibility information, and renames the plugin to comply with WordPress guidelines.
+Verbesserte Positionierung des Ladeindikators und optimierte Phasenanzeige im Chat-Interface.
 
 = 0.1.6 =
-This version contains important performance improvements and bug fixes.
+Entfernung der "Hilfreich/Nicht hilfreich" Buttons und Optimierung der Benutzeroberfläche.
+
+= 0.1.5 =
+Verbesserte Positionierung des Ladeindikators und optimierte Benutzerführung.
+
+= 0.1.4 =
+Verbesserte Fehlerbehandlung und optimierte Benutzerführung.
+
+= 0.1.3 =
+Verbesserte Fehlerbehandlung und optimierte Benutzerführung.
+
+= 0.1.2 =
+Verbesserte Fehlerbehandlung und optimierte Benutzerführung.
+
+= 0.1.1 =
+Verbesserte Fehlerbehandlung und optimierte Benutzerführung.
+
+= 0.1.0 =
+Erste Version des Ikigai Finder Plugins mit grundlegender Chat-Funktionalität und GPT-4 Integration.

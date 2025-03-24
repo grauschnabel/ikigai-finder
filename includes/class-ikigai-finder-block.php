@@ -150,18 +150,14 @@ class Ikigai_Finder_Block {
 		?>
 		<div id="ikigai-finder-chat" class="ikigai-finder-chat-container">
 			<div class="ikigai-finder-chat-messages"></div>
-			<div class="ikigai-finder-chat-input">
-				<textarea id="ikigai-finder-message" placeholder="<?php echo esc_attr__( 'Type your message here...', 'ikigai-finder' ); ?>"></textarea>
-				<button class="ikigai-finder-send"><?php echo esc_html__( 'Send', 'ikigai-finder' ); ?></button>
-			</div>
 			<div class="ikigai-finder-loading" style="display: none;">
 				<div class="ikigai-finder-typing-indicator">
 					<span></span><span></span><span></span>
 				</div>
 			</div>
-			<div class="ikigai-finder-feedback" style="display: none;">
-				<button class="ikigai-finder-feedback-btn" data-value="yes"><?php echo esc_html__( '👍 Helpful', 'ikigai-finder' ); ?></button>
-				<button class="ikigai-finder-feedback-btn" data-value="no"><?php echo esc_html__( '👎 Not helpful', 'ikigai-finder' ); ?></button>
+			<div class="ikigai-finder-chat-input">
+				<textarea id="ikigai-finder-message" placeholder="<?php echo esc_attr__( 'Type your message here...', 'ikigai-finder' ); ?>"></textarea>
+				<button class="ikigai-finder-send"><?php echo esc_html__( 'Send', 'ikigai-finder' ); ?></button>
 			</div>
 		</div>
 		<?php

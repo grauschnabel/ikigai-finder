@@ -40,15 +40,13 @@ document.addEventListener(
 		const messagesContainer = chatContainer.querySelector( '.ikigai-finder-chat-messages' );
 		const messageInput		= chatContainer.querySelector( '#ikigai-finder-message' );
 		const sendButton		= chatContainer.querySelector( '.ikigai-finder-send' );
-		const feedbackContainer = chatContainer.querySelector( '.ikigai-finder-feedback' );
 		const loadingIndicator	= chatContainer.querySelector( '.ikigai-finder-loading' );
 		const copyChat			= chatContainer.querySelector( '.ikigai-finder-copy-chat' );
 		const copyIkigai		= chatContainer.querySelector( '.ikigai-finder-copy-ikigai' );
-		const feedbackButtons	= chatContainer.querySelectorAll( '.ikigai-finder-feedback-btn' );
 		const resetButton       = document.getElementById( 'ikigai-finder-reset-button' );
 
 		// Check if all elements are present
-		if ( ! messagesContainer || ! messageInput || ! sendButton || ! feedbackContainer || ! loadingIndicator) {
+		if ( ! messagesContainer || ! messageInput || ! sendButton || ! loadingIndicator) {
 			console.error( 'Ikigai Finder: Missing chat elements' );
 			return;
 		}
@@ -91,7 +89,8 @@ document.addEventListener(
 		);
 
 		// Füge die Phasen-Anzeige nach dem Chat-Input ein
-		chatContainer.insertBefore( phaseIndicator, feedbackContainer );
+		const chatInput = chatContainer.querySelector('.ikigai-finder-chat-input');
+		chatContainer.insertBefore(phaseIndicator, chatInput.nextSibling);
 
 		function updatePhaseIndicator(phase) {
 			console.log('Ikigai Finder: Aktualisiere Phasenindikator auf:', phase);
@@ -224,7 +223,7 @@ document.addEventListener(
 		function setLoading(loading) {
 			if (loading) {
 				// Zeige den Loading-Indikator an
-				loadingIndicator.style.display = 'block';
+				loadingIndicator.style.display = 'flex';
 				messagesContainer.classList.add('loading');
 				sendButton.disabled = true;
 				messageInput.disabled = true;
@@ -284,9 +283,6 @@ document.addEventListener(
 						role: 'assistant',
 						content: data.data.message
 					});
-
-					// Zeige Feedback-Buttons an
-					feedbackContainer.style.display = 'block';
 				} else {
 					// Zeige Fehlermeldung an
 					const errorMessage = data.data.message || 'Ein Fehler ist aufgetreten.';
@@ -308,14 +304,6 @@ document.addEventListener(
 				e.preventDefault();
 				sendMessage();
 			}
-		});
-
-		// Feedback-Buttons
-		feedbackButtons.forEach(button => {
-			button.addEventListener('click', () => {
-				feedbackContainer.style.display = 'none';
-				// Hier können Sie das Feedback an den Server senden
-			});
 		});
 
 		// Reset-Button

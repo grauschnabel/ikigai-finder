@@ -49,10 +49,10 @@ msgid "Frequency Penalty"
 msgstr "Wortwiederholungs-Penalty"
 
 msgid "Configure your OpenAI API settings for the Ikigai finder here."
-msgstr "Konfigurieren Sie hier Ihre OpenAI API-Einstellungen für den Ikigai-Finder."
+msgstr "Konfiguriere hier deine OpenAI API-Einstellungen für den Ikigai-Finder."
 
 msgid "Enter your OpenAI API key. You can get one from"
-msgstr "Geben Sie hier Ihren OpenAI API-Schlüssel ein. Sie können einen Schlüssel auf der"
+msgstr "Gib hier deinen OpenAI API-Schlüssel ein. Du kannst einen Schlüssel auf der"
 
 msgid "GPT-4o Mini (Default)"
 msgstr "GPT-4o Mini (Standard)"
@@ -70,7 +70,7 @@ msgid "GPT-3.5 Turbo"
 msgstr "GPT-3.5 Turbo"
 
 msgid "Select the GPT model to use. GPT-4o Mini is optimized for Ikigai coaching."
-msgstr "Wählen Sie das zu verwendende GPT-Modell. GPT-4o Mini ist für Ikigai-Coaching optimiert."
+msgstr "Wähle das zu verwendende GPT-Modell. GPT-4o Mini ist für Ikigai-Coaching optimiert."
 
 msgid "The system prompt defines the behavior and instructions for ChatGPT."
 msgstr "Der System-Prompt definiert das Verhalten und die Anweisungen für ChatGPT."
@@ -97,13 +97,13 @@ msgid "Reset Settings"
 msgstr "Einstellungen zurücksetzen"
 
 msgid "Click here to reset all settings (except API key) to default values:"
-msgstr "Klicken Sie hier, um alle Einstellungen (außer dem API-Schlüssel) auf die Standardwerte zurückzusetzen:"
+msgstr "Klicke hier, um alle Einstellungen (außer dem API-Schlüssel) auf die Standardwerte zurückzusetzen:"
 
 msgid "Reset to Default Values"
 msgstr "Auf Standardwerte zurücksetzen"
 
 msgid "Type your message here..."
-msgstr "Geben Sie hier Ihre Nachricht ein..."
+msgstr "Gib hier deine Nachricht ein..."
 
 msgid "Send"
 msgstr "Senden"
@@ -133,7 +133,7 @@ msgid "Security check failed."
 msgstr "Sicherheitsüberprüfung fehlgeschlagen."
 
 msgid "API key not configured. Please configure the API key in the settings."
-msgstr "API-Schlüssel nicht konfiguriert. Bitte konfigurieren Sie den API-Schlüssel in den Einstellungen."
+msgstr "API-Schlüssel nicht konfiguriert. Bitte konfiguriere den API-Schlüssel in den Einstellungen."
 
 msgid "System prompt not configured."
 msgstr "System-Prompt nicht konfiguriert."
@@ -158,3 +158,24 @@ msgstr "Ungültiges Antwortformat von der API"
 
 msgid "An unexpected error occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
+
+msgid "Test API Key"
+msgstr "API-Key testen"
+
+msgid "Please enter an API key first."
+msgstr "Bitte gib zuerst einen API-Key ein."
+
+msgid "Testing API key..."
+msgstr "Teste API-Key..."
+
+msgid "An error occurred. Please try again later."
+msgstr "Ein Fehler ist aufgetreten. Bitte versuche es später erneut."
+
+msgid "You do not have permission to perform this action."
+msgstr "Du hast keine Berechtigung für diese Aktion."
+
+msgid "Please enter an API key."
+msgstr "Bitte gib einen API-Key ein."
+
+msgid "API key is valid and working!"
+msgstr "API-Key ist gültig und funktioniert!"

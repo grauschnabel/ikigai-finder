@@ -51,6 +51,7 @@ class Ikigai_Finder_Settings {
 		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_ikigai_finder_reset_settings', array( $this, 'handle_reset_settings' ) );
+		add_action( 'wp_ajax_ikigai_finder_test_api_key', array( $this, 'test_api_key' ) );
 	}
 
 	/**
@@ -89,7 +90,7 @@ class Ikigai_Finder_Settings {
 			array(
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
-				'default'           => 'gpt-4',
+				'default'           => 'gpt-4-turbo',
 			)
 		);
 		register_setting(
@@ -216,6 +217,8 @@ class Ikigai_Finder_Settings {
 		$value = get_option( 'ikigai_finder_openai_key' );
 		?>
 		<input type="password" id="ikigai_finder_openai_key" name="ikigai_finder_openai_key" value="<?php echo esc_attr( $value ); ?>" class="regular-text">
+		<button type="button" id="test-api-key" class="button button-secondary"><?php echo esc_html__( 'API-Key testen', 'ikigai-finder' ); ?></button>
+		<div id="api-key-test-result" class="notice" style="display: none; margin-top: 10px;"></div>
 		<p class="description">
 			<?php
 			echo wp_kses(
@@ -229,7 +232,99 @@ class Ikigai_Finder_Settings {
 			);
 			?>
 		</p>
+		<script>
+		jQuery(document).ready(function($) {
+			$('#test-api-key').on('click', function() {
+				var apiKey = $('#ikigai_finder_openai_key').val();
+				var $result = $('#api-key-test-result');
+
+				if (!apiKey) {
+					$result.removeClass('notice-success notice-error').addClass('notice-error').html('<?php echo esc_js( __( 'Bitte geben Sie zuerst einen API-Key ein.', 'ikigai-finder' ) ); ?>').show();
+					return;
+				}
+
+				$result.removeClass('notice-success notice-error').addClass('notice-info').html('<?php echo esc_js( __( 'Teste API-Key...', 'ikigai-finder' ) ); ?>').show();
+
+				$.ajax({
+					url: ajaxurl,
+					type: 'POST',
+					data: {
+						action: 'ikigai_finder_test_api_key',
+						api_key: apiKey,
+						nonce: '<?php echo wp_create_nonce( 'ikigai_finder_test_api_key' ); ?>'
+					},
+					success: function(response) {
+						if (response.success) {
+							$result.removeClass('notice-info notice-error').addClass('notice-success').html(response.data.message).show();
+						} else {
+							$result.removeClass('notice-info notice-success').addClass('notice-error').html(response.data.message).show();
+						}
+					},
+					error: function() {
+						$result.removeClass('notice-info notice-success').addClass('notice-error').html('<?php echo esc_js( __( 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.', 'ikigai-finder' ) ); ?>').show();
+					}
+				});
+			});
+		});
+		</script>
 		<?php
+	}
+
+	/**
+	 * Test the OpenAI API key.
+	 *
+	 * @return void
+	 */
+	public function test_api_key() {
+		check_ajax_referer( 'ikigai_finder_test_api_key', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Sie haben keine Berechtigung für diese Aktion.', 'ikigai-finder' ) ) );
+			return;
+		}
+
+		$api_key = isset( $_POST['api_key'] ) ? sanitize_text_field( $_POST['api_key'] ) : '';
+
+		if ( empty( $api_key ) ) {
+			wp_send_json_error( array( 'message' => __( 'Bitte geben Sie einen API-Key ein.', 'ikigai-finder' ) ) );
+			return;
+		}
+
+		$response = wp_remote_post(
+			'https://api.openai.com/v1/chat/completions',
+			array(
+				'headers' => array(
+					'Authorization' => 'Bearer ' . $api_key,
+					'Content-Type'  => 'application/json',
+				),
+				'body'    => wp_json_encode(
+					array(
+						'model'    => 'gpt-3.5-turbo',
+						'messages' => array(
+							array(
+								'role'    => 'user',
+								'content' => 'Test message',
+							),
+						),
+					)
+				),
+				'timeout' => 10,
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( array( 'message' => $response->get_error_message() ) );
+			return;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( isset( $body['error'] ) ) {
+			wp_send_json_error( array( 'message' => $body['error']['message'] ) );
+			return;
+		}
+
+		wp_send_json_success( array( 'message' => __( 'API-Key ist gültig und funktioniert!', 'ikigai-finder' ) ) );
 	}
 
 	/**
@@ -382,9 +477,8 @@ class Ikigai_Finder_Settings {
 
 		check_admin_referer( 'ikigai_finder_reset_settings' );
 
-		// Reset all settings to defaults.
-		update_option( 'ikigai_finder_openai_key', '' );
-		update_option( 'ikigai_finder_model', 'gpt-4' );
+		// Reset all settings to defaults except API key
+		update_option( 'ikigai_finder_model', 'gpt-4-turbo' );
 		update_option( 'ikigai_finder_system_prompt', $this->get_default_prompt() );
 		update_option( 'ikigai_finder_temperature', 0.7 );
 		update_option( 'ikigai_finder_max_tokens', 1000 );

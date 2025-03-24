@@ -2,17 +2,17 @@
 
 /**
  * Plugin Name: Ikigai Finder
- * Plugin URI: https://github.com/grauschnabel/ikigai-finder
- * Description: A WordPress plugin that provides an AI-powered Ikigai finder to guide users through their personal Ikigai discovery process.
- * Author: Martin Kaffanke
- * Author URI: https://kaffanke.info
- * Version: 0.1.7
+ * Plugin URI: https://github.com/martinm/ikigai-finder
+ * Description: Ein WordPress-Plugin, das einen Chat-basierten Ikigai-Coaching-Prozess mit GPT-4 Integration anbietet.
+ * Author: Martin M.
+ * Author URI: https://github.com/martinm
+ * Version: 0.1.8
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: ikigai-finder
  * Domain Path: /languages
- * Requires at least: 6.7.0
- * Requires PHP: 8.1
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
  *
  * @package Ikigai_Finder
  */
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @var string
  */
-define( 'IKIGAI_FINDER_VERSION', '0.1.7' );
+define( 'IKIGAI_FINDER_VERSION', '0.1.8' );
 
 /**
  * Plugin directory path.
