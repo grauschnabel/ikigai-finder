@@ -8,6 +8,9 @@ Stable tag: 0.1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
+IMPORTANT: This plugin is DEPRECATED and no longer maintained as of 2025-08-11. Use at your own risk.
+WICHTIG: Dieses Plugin ist DEPRECATED und wird seit 2025-08-11 nicht mehr gepflegt. Nutzung auf eigenes Risiko.
+
 Ein WordPress-Plugin, das einen Chat-basierten Ikigai-Coaching-Prozess mit GPT-4 Integration anbietet.
 
 == Description ==
@@ -135,3 +138,11 @@ Verbesserte Fehlerbehandlung und optimierte Benutzerführung.
 
 = 0.1.0 =
 Erste Version des Ikigai Finder Plugins mit grundlegender Chat-Funktionalität und GPT-4 Integration.
+
+== Deprecated ==
+
+This plugin is no longer maintained as of 2025-08-11 and the repository has been archived. No further updates, issues, or support will be provided.
+
+Dieses Plugin wird seit dem 11.08.2025 nicht mehr gepflegt und das Repository wurde archiviert. Es werden keine Updates, Issues oder Support mehr bereitgestellt.
+
+Keine offiziellen Alternativen verfügbar.

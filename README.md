@@ -1,3 +1,13 @@
+[DEPRECATED] Dieses Projekt wird seit 2025-08-11 nicht mehr gepflegt und wurde archiviert. Es werden keine Issues oder Pull Requests mehr bearbeitet.
+
+[DEPRECATED] This project is no longer maintained as of 2025-08-11 and has been archived. Issues and PRs are no longer monitored.
+
+— Keine offiziellen Nachfolger/Alternativen verfügbar.
+
+— No official replacements available.
+
+---
+
 # Ikigai Finder WordPress Plugin
 
 Ein WordPress-Plugin, das einen Chat-basierten Ikigai-Coaching-Prozess mit GPT-4 Integration anbietet.
