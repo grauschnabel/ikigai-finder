@@ -54,5 +54,6 @@
     },
     "extra": {
         "wordpress-install-dir": "vendor/wordpress/wordpress"
-    }
+    },
+    "abandoned": true
 }
